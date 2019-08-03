@@ -10,5 +10,5 @@ package BaseClasses;
  * @author josel
  */
 public class SolGenerator {
-    public void genRandomSol(Instance i, Solution sol){}
+	public void genRandomSol(Instance i, Solution sol) {}
 }

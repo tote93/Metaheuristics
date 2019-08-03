@@ -10,5 +10,10 @@ package BaseClasses;
  * @author josel
  */
 public class Instance {
-    
+	public ClimbInstance() {
+
+	}
+	public void readInstance(String filename, int numKnapsacks) throws FileNotFoundException, IOException {
+
+	}
 }

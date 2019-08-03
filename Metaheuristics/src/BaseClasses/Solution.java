@@ -11,19 +11,19 @@ package BaseClasses;
  */
 public class Solution {
     private double _fitness = 0;
-    
-    public double getFitness(){
+
+    public double getFitness() {
         return _fitness;
     }
-    
+
     public void copy(Solution sol) {}
 
     public int whereIsObject(int i) {
         return 0;
     }
-    
-    public void setFitness(double d){
+
+    public void setFitness(double d) {
         _fitness = d;
     }
-    
+
 }

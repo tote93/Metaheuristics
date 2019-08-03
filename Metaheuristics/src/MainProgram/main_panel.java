@@ -5,11 +5,15 @@
  */
 package MainProgram;
 
+import BaseClasses.mainClass;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.jfree.chart.ChartPanel;
+import org.jfree.data.xy.XYSeriesCollection;
 
 /**
  *
@@ -20,23 +24,24 @@ public class main_panel extends javax.swing.JFrame {
 
     // Variable empleada para seleccionar la heuristica a usar
     String _heuristicSelected = null;
-  
+
     /**
      * Constructor por defecto, inicializa los elementos visuales y les modifica el estado
-     * @throws IOException 
+     * @throws IOException
      */
     public main_panel() throws IOException {
         initComponents();
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);        
+        this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
         this.jpanelList.setVisible(false);
+        this.InitialCheck();
         this.txtInfo.setVisible(false);
         this.jpanelInfo.setVisible(false);
         this.startAlgorithm.setVisible(false);
         this.DisplayPanel.setVisible(true);
-        
+
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -187,9 +192,9 @@ public class main_panel extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 401, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(DisplayPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                      .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 401, javax.swing.GroupLayout.PREFERRED_SIZE)
+                      .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                      .addComponent(DisplayPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -202,48 +207,81 @@ public class main_panel extends javax.swing.JFrame {
 
     /**
      * Función usada para agilizar el proceso de depuración
-     * @param evt 
+     * @param evt
      */
     private void testingButtonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_testingButtonMousePressed
         // TODO add your handling code here:
+        mainClass mc = new mainClass("Algoritmo de la mochila", "LocalSearch");
+
+        XYSeriesCollection dataset = mc.initialise();
+
+        GenGraphic g = new GenGraphic();
+        ChartPanel chart = g.createChartPanel();
+        chart.setSize(new Dimension(DisplayPanel.getWidth(), DisplayPanel.getHeight()));
+
+        DisplayPanel.add(chart);
+        DisplayPanel.validate();
+        DisplayPanel.repaint();
     }//GEN-LAST:event_testingButtonMousePressed
 
     /**
      * Función ejecutada al seleccionar la heuristica de Climb
-     * @param evt 
+     * @param evt
      */
     private void simpleClimbMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_simpleClimbMousePressed
         // TODO add your handling code here:
+        labelTitle.setText("Basados en trayectorias");
+        _heuristicSelected = "LocalSearch";
+        jpanelList.setVisible(true);
     }//GEN-LAST:event_simpleClimbMousePressed
 
     /**
      * Función con la que obtenemos el algoritmo seleccionado de la lista
-     * @param evt 
+     * @param evt
      */
     private void listAlgorithmsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listAlgorithmsMouseClicked
-        // TODO add your handling code here:           
+        // TODO add your handling code here:
+        this.startAlgorithm.setVisible(true);
+        switch (listAlgorithms.getSelectedValue()) {
+        case "Algoritmo de la mochila":
+            this.txtInfo.setVisible(true);
+            this.jpanelInfo.setVisible(true);
+            this.txtInfo.setText("El problema de la mochila, es un problema de optimización combinatoria."
+                                 + "\nModela una situación análoga al llenar una mochila con todo o parte de un conjunto de objetos, cada uno con un peso y valor específicos. Los objetos colocados en la mochila deben maximizar el valor total sin exceder el peso máximo");
+            break;
+        default:
+            break;
+        }
     }//GEN-LAST:event_listAlgorithmsMouseClicked
     /**
      * Una vez obtenidos la heuristica y el algoritmo, se ejecutará dicha función, iniciando el algoritmo
-     * @param evt 
+     * @param evt
      */
     private void startAlgorithmMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_startAlgorithmMouseClicked
         // TODO add your handling code here:
-
+        mainClass mc = new mainClass(listAlgorithms.getSelectedValue(), _heuristicSelected );
     }//GEN-LAST:event_startAlgorithmMouseClicked
 
     private void testingButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_testingButtonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_testingButtonActionPerformed
-    
 
-    
+
+
     /**
      * Se realizan las comprobaciones iniciales y en caso de que no se cumpla, se ejecuta el método para crear la jerarquia
      * @see Reset
-     * @throws IOException 
+     * @throws IOException
      */
-    public final void InitialCheck() throws IOException{       
+    public final void InitialCheck() throws IOException {
+        String url = new java.io.File(".").getCanonicalPath();
+        url = url.replace("\\", "/");
+        url = url + "/Algorithms";
+        File f = new File(url);
+        if (!f.exists()) {
+            Reset reset = new Reset();
+            reset.createDirectoryHierarchy();
+        }
     }
     /**
      * @param args the command line arguments
@@ -252,7 +290,7 @@ public class main_panel extends javax.swing.JFrame {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -284,7 +322,7 @@ public class main_panel extends javax.swing.JFrame {
             }
         });
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private java.awt.Panel DisplayPanel;
     private javax.swing.JMenuItem HillClimb;

@@ -10,10 +10,10 @@ package BaseClasses;
  * @author josel
  */
 public class ChangeOperation {
-    public ChangeOperation(){}
-    
-    public void apply(Solution sol){
-        
-    }
-    
+	public ChangeOperation() {}
+
+	public void apply(Solution sol) {
+
+	}
+
 }

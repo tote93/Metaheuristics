@@ -10,7 +10,7 @@ package BaseClasses;
  * @author josel
  */
 public class NeighExplorer {
-    public boolean findOperation(Instance instance, Solution solution, ChangeOperation operation){
-        return false;
-    }
+	public boolean findOperation(Instance instance, Solution solution, ChangeOperation operation) {
+		return false;
+	}
 }
