@@ -4,6 +4,7 @@ package BaseClasses;
 import Algorithms.Knapsack.ClimbEvaluator;
 import Algorithms.Knapsack.ClimbInstance;
 import Algorithms.Knapsack.ClimbLocalSearch;
+import Algorithms.Knapsack.ClimbSimpleBestImprovement;
 import Algorithms.Knapsack.ClimbSimpleFirstImprovement;
 import Algorithms.Knapsack.ClimbSolGenerator;
 import Algorithms.Knapsack.ClimbSolution;
@@ -110,10 +111,11 @@ public class mainClass {
 					Logger.getLogger(mainClass.class.getName()).log(Level.SEVERE, null, ex);
 				}
 				ArrayList<Double> results = new ArrayList<>();
-				ClimbSimpleFirstImprovement firstExplorer = new ClimbSimpleFirstImprovement();
-				//dataset = this.runALSExperiment(results, climb, firstExplorer);
+				ClimbSimpleBestImprovement firstExplorer = new ClimbSimpleBestImprovement();
+				dataset = this.runALSExperiment(results, climb, firstExplorer);
 
 				break;
+
 			default:
 				System.out.println("DEFAULT ENTRY");
 				break;
@@ -145,7 +147,7 @@ public class mainClass {
 	 * @param exp Objeto que explorará el vecindario de soluciones
 	 * @return XYSeriesCollection un frame para representar visualmente
 	 */
-	public XYSeriesCollection runALSExperiment(ArrayList results, ClimbInstance instance, ClimbSimpleFirstImprovement exp) {
+	public XYSeriesCollection runALSExperiment(ArrayList results, ClimbInstance instance, NeighExplorer exp) {
 
 		ClimbLocalSearch ls = new ClimbLocalSearch();
 
@@ -175,8 +177,8 @@ public class mainClass {
 
 			results.add(currentFitness);
 			numInitialSolutions++;
+                        ls.optimise(instance, exp, initialSolution);                        
 
-			ls.optimise(instance, exp, initialSolution);
 			ArrayList<Double> resultsLS = ls.getResults();
 
 			for (int i = 0; i < resultsLS.size(); i++) {
@@ -187,7 +189,7 @@ public class mainClass {
 		}
 		for (int i = 1; i < results.size(); i++)
 			serie.add((double) results.get(i), i);
-
+                System.out.println("TENGO: "+results.size());
 		dataset.addSeries(serie);
 		return dataset;
 	}

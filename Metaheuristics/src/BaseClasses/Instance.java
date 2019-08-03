@@ -5,12 +5,15 @@
  */
 package BaseClasses;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 /**
  *
  * @author josel
  */
 public class Instance {
-	public ClimbInstance() {
+	public Instance() {
 
 	}
 	public void readInstance(String filename, int numKnapsacks) throws FileNotFoundException, IOException {

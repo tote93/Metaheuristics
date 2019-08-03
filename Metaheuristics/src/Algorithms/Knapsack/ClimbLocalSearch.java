@@ -6,10 +6,7 @@
 package Algorithms.Knapsack;
 
 import BaseClasses.NeighExplorer;
-import BaseClasses.Instance;
-import BaseClasses.Solution;
 import java.util.ArrayList;
-
 /**
  *
  * @author josel
@@ -20,19 +17,22 @@ public class ClimbLocalSearch {
     public ClimbLocalSearch() {
     }
 
-    public void optimise(ClimbInstance inst, ClimbSimpleFirstImprovement exp, ClimbSolution sol) {
+    public void optimise(ClimbInstance inst, NeighExplorer exp, ClimbSolution sol) {
         this._results.clear();
         this._results.add(sol.getFitness());
         ClimbAssignmentOperation operation = new ClimbAssignmentOperation();
-        int c = 0;
+
+        System.out.print(exp.getClass()+" <------");
+
         while (exp.findOperation(inst, sol, operation)) {
             operation.apply(sol);
             this._results.add(sol.getFitness());
-            /* System.out.println(c);
-             c++;*/
         }
     }
+   
     public ArrayList<Double> getResults() {
         return this._results;
     }
+
+
 }
