@@ -5,22 +5,25 @@
  */
 package Algorithms.Knapsack;
 
-import BaseClasses.NeighExplorer;
 import java.util.ArrayList;
 
 /**
  *
  * @author josel
  */
-public class ClimbSimpleBestImprovement extends NeighExplorer{
-    public boolean findOperationClimbInstance (ClimbInstance instance, ClimbSolution solution,
-                          ClimbAssignmentOperation operation) {
+public class MQKPSimpleBestImprovement implements MQKPNeighExplorer{
+    public MQKPSimpleBestImprovement(){}
+  
 
+    @Override
+    public boolean findOperation(MQKPInstance instance, MQKPSolution solution, MQKPChangeOperation operation) {
+            
+        MQKPAssignmentOperation oaOperation = (MQKPAssignmentOperation) operation;
         //Crear una permutación de los índices de los objetos e inicializar algunas variables
         ArrayList<Integer> perm = new ArrayList<>();
 
         int numObjs = instance.getNumObjs();
-        ClimbInstance.randomPermutation(numObjs, perm);
+        MQKPInstance.randomPermutation(numObjs, perm);
         int numKnapsacks = instance.getNumKnapsacks();
         boolean initialised = false;
         double bestDeltaFitness = 0;
@@ -28,15 +31,14 @@ public class ClimbSimpleBestImprovement extends NeighExplorer{
 
         for (int i = 0; i < numObjs; i++) {
             for (int j = 0; j <= numKnapsacks; j++) {
-                deltaFitness = ClimbEvaluator.computeDeltaFitness(instance, solution, perm.get(i), j);
+                deltaFitness = MQKPEvaluator.computeDeltaFitness(instance, solution, perm.get(i), j);
                 if (deltaFitness > bestDeltaFitness || !initialised) {
                     initialised = true;
                     bestDeltaFitness = deltaFitness;
-                    operation.setValues(perm.get(i), j, bestDeltaFitness);
+                    oaOperation.setValues(perm.get(i), j, bestDeltaFitness);
                 }
             }
         }
-        return (bestDeltaFitness > 0.0) ? true : false;
-
-    }    
+        return (bestDeltaFitness > 0.0);
+    }
 }

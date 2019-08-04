@@ -5,8 +5,6 @@
  */
 package Algorithms.Knapsack;
 
-import BaseClasses.Instance;
-import BaseClasses.Solution;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -19,20 +17,33 @@ import java.util.Scanner;
 
 
 /**
- *
- * @author josel
+ * Clase que almacena la información de una instancia del problema MQKP
+ * @author i62gorej
  */
-public class ClimbInstance extends Instance {
+public class MQKPInstance {
+    /*
+    * _numKnapsack Entero que indica el número de mochilas que se va a considerar. Este no se lee del fichero, sino que lo establecéis vosotros
+    * _numObjs Entero donde se almacenará el número de objetos del problema
+    * _profits Matriz donde se van a almacenar los beneficios de los objetos según lo indicado arriba. HAY QUE RESERVAR SU MEMORIA
+    * _weights Vector con los pesos de los objetos. HAY QUE RESERVAR SU MEMORIA
+    * _capacities Vector con las capacidades de las mochilas. HAY QUE RESERVAR SU MEMORIA. Para evitar problemas, reservadlo con capacidad (1 + numKnapsacks) y utilizadlo desde el índice 1 en adelante
+	    
+    */
     int _numKnapsack;
     int _numObjs;
     int [][]_profits;
     ArrayList<Double> _weights = new ArrayList<>();
     ArrayList<Double> _capacities = new ArrayList<>();
-
-    public ClimbInstance() {
+    /**
+    * Constructor por defecto
+    */
+    public MQKPInstance() {
         this._numObjs = 0;
         this._numKnapsack = 0;
     }
+    /**
+     * Funciones Getter que devuelven la información de la instancia
+     */
     public int getNumObjs() {
         return this._numObjs;
     }
@@ -48,7 +59,18 @@ public class ClimbInstance extends Instance {
     public Double getCapacity(int index) {
         return this._capacities.get(index);
     }
+    
+    public double getProfit(int o1, int o2) {
+        return _profits[o1][o2];
+    }
 
+    public double getProfit(int object) {
+        return _profits[object][object];
+    }
+    /**
+     * Funciones Sets que establecen valores a la instancia 
+     */
+    
     public void setNumObjs(int NumObjs) {
         this._numObjs = NumObjs;
     }
@@ -57,8 +79,12 @@ public class ClimbInstance extends Instance {
         this._numKnapsack = numKnapsacks;
     }
 
-
-    public double getMaxCapacityViolation(ClimbSolution solution) {
+    /**
+    * Función que devuelve por cuanto se viola la capacidad de la mochila que está más cargada de más
+    * @param solution Referencia a un objeto que representa una solución al problema
+    * @return Máxima violación de las capacidades de las mochilas
+    */
+    public double getMaxCapacityViolation(MQKPSolution solution) {
 
         Double [] arr = new Double[1 + this._numKnapsack];
         ArrayList<Double> sumWeights = new ArrayList<>(Arrays.asList(arr));
@@ -79,7 +105,13 @@ public class ClimbInstance extends Instance {
 
         return maxCapacityViolation;
     }
-    public double getSumProfits(ClimbSolution solution) {
+    
+    /**
+    * Función que calcula la suma de beneficios individuales y cuadráticos de los objetos en mochilas
+    * @param solution Referencia a un objeto que representa una solución al problema
+    * @return Suma de los beneficios individuales y cuadráticos de los objetos en las mochilas
+    */
+    public double getSumProfits(MQKPSolution solution) {
 
         double sumProfits = 0.;
         int _numObjs = this._numObjs, indexX = 0, indexY = 0;
@@ -98,7 +130,12 @@ public class ClimbInstance extends Instance {
         }
         return sumProfits;
     }
-
+    /**
+    * Función de lectura de un fichero de entrada
+    * @param filename Nombre del fichero donde están los datos de la instancia
+    * @param numKnapsacks Entero que indica el número de mochilas que se va a considerar. Este no se lee del fichero, sino que lo establecéis vosotros
+     * @throws java.io.FileNotFoundException
+    */
     public void readInstance(String filename, int numKnapsacks) throws FileNotFoundException, IOException {
         //Establecemos y limpiamos la ruta donde se encuentra el archivo
         String url = new java.io.File(".").getCanonicalPath();
@@ -150,15 +187,17 @@ public class ClimbInstance extends Instance {
 
     }
 
-    public double getProfit(int o1, int o2) {
-        return _profits[o1][o2];
-    }
 
-    public double getProfit(int object) {
-        return _profits[object][object];
-    }
-
-    public double getDeltaSumProfits(ClimbSolution solution, int indexObject,
+    /**
+    * Función que calcula la diferencia en la suma de los beneficios si a la solución se le aplicase la asignación del objeto indexObject a la mochila indexKnapsack
+    * @param solution Referencia a un objeto que representa una solución al problema.
+    * @param indexObject Índice del objeto que se pondría en otra mochila
+    * @param indexKnapsack Índice de la mochila donde se pondría el objeto. Puede ser 0, indicando que se saca el objeto de la mochila en la que esté
+    *
+    * @return Diferencia en la suma de los beneficios si a la solución se le aplicase la asignación del objeto indexObject a la mochila indexKnapsack
+    *
+    */
+    public double getDeltaSumProfits(MQKPSolution solution, int indexObject,
                                      int indexKnapsack) {
 
         double deltaSumProfits = 0;
@@ -196,7 +235,11 @@ public class ClimbInstance extends Instance {
         }
         return deltaSumProfits;
     }
-
+    /**
+    * Función que genera una permutación de los enteros de 0 a (size - 1)
+    * @param size Tamaño de la permutación
+    * @param perm Vector donde se almacenará la permutación
+    */
     public static void randomPermutation(int size, ArrayList<Integer> perm) {
 
         /**
@@ -217,7 +260,17 @@ public class ClimbInstance extends Instance {
         }
 
     }
-    double getDeltaMaxCapacityViolation(ClimbSolution solution,
+    
+    
+    /**
+    * Función que calcula la diferencia en la máxima violación de alguna de las capacidades de las mochilas si a la solución se le aplicase la asignación del objeto indexObject a la mochila indexKnapsack
+    * @param[in] solution Referencia a un objeto que representa una solución al problema.
+    * @param[in] indexObject Índice del objeto que se pondría en otra mochila
+    * @param[in] indexKnapsack Índice de la mochila donde se pondría el objeto. Puede ser 0, indicando que se saca el objeto de la mochila en la que esté
+    *
+    * @return Diferencia en la suma de los beneficios si a la solución se le aplicase la asignación del objeto indexObject a la mochila indexKnapsack
+    */        
+    double getDeltaMaxCapacityViolation(MQKPSolution solution,
                                         int indexObject, int indexKnapsack) {
 
         /**
@@ -236,4 +289,10 @@ public class ClimbInstance extends Instance {
 
         return (newViolation - originViolation);
     }
+    
+    
+    
+    
+    
+    
 }
