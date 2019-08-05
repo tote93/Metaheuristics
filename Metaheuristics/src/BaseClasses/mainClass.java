@@ -3,12 +3,15 @@ package BaseClasses;
 
 import Algorithms.Knapsack.MQKPNeighExplorer;
 import Algorithms.Knapsack.MQKPEvaluator;
+import Algorithms.Knapsack.MQKPGrasp;
 import Algorithms.Knapsack.MQKPInstance;
+import Algorithms.Knapsack.MQKPIteratedGreedy;
 import Algorithms.Knapsack.MQKPLocalSearch;
 import Algorithms.Knapsack.MQKPSimpleBestImprovement;
 import Algorithms.Knapsack.MQKPSimpleFirstImprovement;
 import Algorithms.Knapsack.MQKPSolGenerator;
 import Algorithms.Knapsack.MQKPSolution;
+import Algorithms.Knapsack.StopCondition;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -30,7 +33,7 @@ import org.jfree.data.xy.XYSeriesCollection;
 
 /**
  *
- * @author josel
+ * @author i62gorej
  */
 public class mainClass {
 	// Algoritmo seleccionado
@@ -68,67 +71,68 @@ public class mainClass {
 	 */
 	public XYSeriesCollection initialise() {
 		//Selector de algoritmo y _heuristica usada
-		//Selector de algoritmo y _heuristica usada
 		XYSeriesCollection dataset = new XYSeriesCollection();
+                ArrayList<Double> results = new ArrayList<>();    
 		switch (_algorithm) {
 		case "Algoritmo de la mochila":
 			switch (_heuristic) {
 			case "LocalSearch":
-				//Generamos los elementos del modal:
-				JLabel label = new JLabel("Número de mochilas");
-				label.setFont(new Font("Serif", Font.BOLD, 18));
-				label.setHorizontalAlignment(JLabel.CENTER);
-				label.setVerticalAlignment(JLabel.CENTER);
-				_dialog.add(label);
-
-				//Tras el titulo, insertamos un campo de texto para el número de mochilas
-				JTextField txt = new JTextField();
-				txt.setHorizontalAlignment(JTextField.CENTER);
-				_dialog.add(txt);
-
-				//Insertamos el boton de validar los datos
-				JButton btn = new JButton("Validar");
-				btn.addActionListener(new ActionListener(){
-				    boolean numeric = false;
-				    //ActionPermormed, comprueba si el texto introducido es númerico
-				    @Override
-				    public void actionPerformed(ActionEvent e) {
-				        try{
-				            int num = Integer.parseInt(txt.getText());
-				            numeric = true;
-				            }catch(NumberFormatException except){
-				                numeric = false;
-				            }
-				            if(!numeric)
-				                btn.setBackground(Color.red);
-				            else{
-				                _numKnapSack = Integer.parseInt(txt.getText());
-				                _frame.dispose();
-				            }
-				        }
-				    });
-				_dialog.add(btn);
+				generateOptionsKnapsackProblem();
 				generateDialog(120, 350,"Parámetros Knapsack");
 				//Fin de la generación del modal
-
 				MQKPInstance climb = new MQKPInstance();
 				try {
 					climb.readInstance("/Algorithms/Knapsack/exampleKnapsack.txt", this._numKnapSack);
 				} catch (IOException ex) {
 					Logger.getLogger(mainClass.class.getName()).log(Level.SEVERE, null, ex);
 				}
-                                
-				ArrayList<Double> results = new ArrayList<>();                                
+                                                               
 				MQKPSimpleFirstImprovement firstExplorer = new MQKPSimpleFirstImprovement();
                                 XYSeries serieFirst = new XYSeries("Escalada Simple");
+                                serieFirst.setDescription("Escalada Simple");
 				this.runALSExperiment(results, climb, firstExplorer, serieFirst);
                                 dataset.addSeries(serieFirst);
                                 
                                 XYSeries serieBest = new XYSeries("Escalada Max. Pendiente");
+                                serieBest.setDescription("Escalada Max. Pendiente");
                                 MQKPSimpleBestImprovement  bestExplorer = new MQKPSimpleBestImprovement();
                                 this.runALSExperiment(results, climb, bestExplorer, serieBest);
                                 dataset.addSeries(serieBest);                                
 				break;
+                        case "Grasp":
+				generateOptionsKnapsackProblem();
+				generateDialog(120, 350,"Parámetros Knapsack");
+				MQKPInstance Grasp = new MQKPInstance();
+				try {
+					Grasp.readInstance("/Algorithms/Knapsack/exampleKnapsack.txt", this._numKnapSack);
+				} catch (IOException ex) {
+					Logger.getLogger(mainClass.class.getName()).log(Level.SEVERE, null, ex);
+				}				                                
+                                XYSeries serieGrasp = new XYSeries("Grasp");
+                                serieGrasp.setDescription("Grasp");
+                                XYSeries BestGrasp = new XYSeries("BestGrasp");
+                                BestGrasp.setDescription("BestGrasp");                                
+                                this.runAGraspExperiment(results, Grasp,serieGrasp, BestGrasp);
+                                dataset.addSeries(serieGrasp); 
+                                dataset.addSeries(BestGrasp); 
+                            break;
+                        case "IteratedGreedy":
+				generateOptionsKnapsackProblem();
+				generateDialog(120, 350,"Parámetros Knapsack");
+				MQKPInstance IG = new MQKPInstance();
+				try {
+					IG.readInstance("/Algorithms/Knapsack/exampleKnapsack.txt", this._numKnapSack);
+				} catch (IOException ex) {
+					Logger.getLogger(mainClass.class.getName()).log(Level.SEVERE, null, ex);
+				}				                                
+                                XYSeries serieIG = new XYSeries("IG");
+                                serieIG.setDescription("IG");
+                                XYSeries BestIG = new XYSeries("BestIG");
+                                BestIG.setDescription("BestIG");                                    
+                                this.runIGreedyExperiment(results, IG,serieIG, BestIG);
+                                dataset.addSeries(serieIG); 
+                                dataset.addSeries(BestIG); 
+                            break;                            
 			default:
 				System.out.println("DEFAULT ENTRY");
 				break;
@@ -140,7 +144,40 @@ public class mainClass {
 
 		return dataset;
 	}
-
+        private void generateOptionsKnapsackProblem(){
+            //Generamos los elementos del modal:
+            JLabel label = new JLabel("Número de mochilas");
+            label.setFont(new Font("Serif", Font.BOLD, 18));
+            label.setHorizontalAlignment(JLabel.CENTER);
+            label.setVerticalAlignment(JLabel.CENTER);
+            _dialog.add(label);
+            //Tras el titulo, insertamos un campo de texto para el número de mochilas
+            JTextField txt = new JTextField();
+            txt.setHorizontalAlignment(JTextField.CENTER);
+            _dialog.add(txt);
+            //Insertamos el boton de validar los datos
+            JButton btn = new JButton("Validar");
+            btn.addActionListener(new ActionListener(){
+                boolean numeric = false;
+                //ActionPermormed, comprueba si el texto introducido es númerico
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try{
+                        Integer.parseInt(txt.getText());
+			numeric = true;
+			}catch(NumberFormatException except){
+                            numeric = false;
+			}
+			if(!numeric)
+                            btn.setBackground(Color.red);
+			else{
+                            _numKnapSack = Integer.parseInt(txt.getText());
+                            _frame.dispose();
+			}
+		}
+            });
+            _dialog.add(btn);            
+        }
 	/**
 	 * Genera una ventana de dialogo modal
 	 * @param height Altura de la ventana
@@ -202,5 +239,64 @@ public class mainClass {
 			serie.add(i+1, (double) results.get(i));                
                 //System.out.println("Total de iteraciones: "+numInitialSolutions+" y evaluator: "+MQKPEvaluator.getNumEvaluations());
 	}        
+        
+        public void runAGraspExperiment(ArrayList results, MQKPInstance instance, XYSeries serie, XYSeries bestSerie){
+            MQKPSolution initialSolution = new MQKPSolution(instance);
+            MQKPGrasp grasp = new MQKPGrasp();
+            StopCondition stopCond = new StopCondition();
+            MQKPEvaluator.resetNumEvaluations();
+            grasp.initialise(0.25, instance);
+            results.clear();
+            ArrayList <Double> BestofResults = new ArrayList<>();
+            stopCond.setConditions(MAX_SOLUTIONS_PER_RUN, 0, MAX_SECONS_PER_RUN);
+            //Generar solución aleatoria para inicialiar la mejor solución
+            MQKPSolGenerator.genRandomSol(instance, initialSolution);
+            double currentFitness = MQKPEvaluator.computeFitness(instance, initialSolution);
+            initialSolution.setFitness(currentFitness);
+            BestofResults.add(currentFitness);
+            double bestFitness = currentFitness;
+            serie.add(0, currentFitness);
+            bestSerie.add(0, bestFitness);
+            //Ejecutamos Grasp
+            grasp.run(stopCond);
+            
+            //Obtención de resultados
+            ArrayList<Double> resultsGrasp = grasp.getResults();
+            
+            for(int i = 0; i < resultsGrasp.size(); i++){
+                serie.add(i+1, (double) resultsGrasp.get(i));  
+                
+                bestSerie.add(i+1,Math.max(bestSerie.getMaxY(), (double) resultsGrasp.get(i)));                
+            }
+        }
+        public void runIGreedyExperiment(ArrayList results, MQKPInstance instance, XYSeries serie, XYSeries bestSerie){
+            MQKPSolution initialSolution = new MQKPSolution(instance);
+            MQKPIteratedGreedy ig = new MQKPIteratedGreedy();
+            StopCondition stopCond = new StopCondition();
+            MQKPEvaluator.resetNumEvaluations();
+            ig.initialise(0.25, instance);
+            results.clear();
+            ArrayList <Double> BestofResults = new ArrayList<>();
+            stopCond.setConditions(MAX_SOLUTIONS_PER_RUN, 0, MAX_SECONS_PER_RUN);
+            
+            //Generar solución aleatoria para inicialiar la mejor solución
+            MQKPSolGenerator.genRandomSol(instance, initialSolution);
+            double currentFitness = MQKPEvaluator.computeFitness(instance, initialSolution);
+            initialSolution.setFitness(currentFitness);
+            BestofResults.add(currentFitness);
+            double bestFitness = currentFitness;
+            serie.add(0, currentFitness);
+            bestSerie.add(0, bestFitness);
+            //Ejecutamos Grasp
+            ig.run(stopCond);
+            
+            //Obtención de resultados
+            ArrayList<Double> resultsIG = ig.getResults();
+            
+            for(int i = 0; i < resultsIG.size(); i++){
+                serie.add(i+1, (double) resultsIG.get(i));                 
+                bestSerie.add(i+1,Math.max(bestSerie.getMaxY(), (double) resultsIG.get(i)));                
+            }
+        }        
 }
 

@@ -19,8 +19,32 @@ class MQKPAssignmentOperation implements MQKPChangeOperation {
         this._indexObj = indexObject;
     }
 
+    @Override
     public void apply(MQKPSolution sol) {
 	sol.putObjectIn(_indexObj, _indexKnapsack);
 	sol.setFitness(sol.getFitness() + this._deltaFitness);    
     }
+ 	/**
+	 * Función que devuelve el objeto sujeto de la operación
+	 * @return índice del objeto sujeto de la operación
+	 */
+	int getObj(){
+		return _indexObj;
+	}
+
+	/**
+	 * Función que devuelve la diferencia en fitness de la operación,
+	 * @return Diferencia en fitness de la operación (siempre que la solución actual no se hubiese cambiado cuando se calculo dicha diferencia)
+	 */
+	double getDeltaFitness(){
+		return _deltaFitness;
+	}
+
+	/**
+	 * Función que devuelve la mochila objeto de la operación
+	 * @return mochila objeto de la operación
+	 */
+	int getKnapsack(){
+		return _indexKnapsack;
+	}   
 }

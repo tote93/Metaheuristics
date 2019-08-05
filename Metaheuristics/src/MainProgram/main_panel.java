@@ -25,7 +25,7 @@ import org.jfree.data.xy.XYSeriesCollection;
 
 /**
  *
- * @author josel
+ * @author i62gorej
  * Clase principal para representar el programa
  */
 public class main_panel extends javax.swing.JFrame {
@@ -38,12 +38,12 @@ public class main_panel extends javax.swing.JFrame {
 	 * @throws IOException
 	 */
 	public main_panel() throws IOException {
-                this.setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
+		this.setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
 		initComponents();
-                exportGraphic.setEnabled(false);
-                exportGraphic.setToolTipText("Permite exportar la gráfica del algoritmo y heuristicos seleccionados.");
+		exportGraphic.setEnabled(false);
+		exportGraphic.setToolTipText("Permite exportar la gráfica del algoritmo y heuristicos seleccionados.");
 		Dimension sc = Toolkit.getDefaultToolkit().getScreenSize().getSize();
-		this.setSize(sc);		
+		this.setSize(sc);
 		this.jpanelList.setVisible(false);
 		this.InitialCheck();
 		this.txtInfo.setVisible(false);
@@ -75,9 +75,12 @@ public class main_panel extends javax.swing.JFrame {
         jMenuItem1 = new javax.swing.JMenuItem();
         exportGraphic = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
-        simpleClimb = new javax.swing.JMenuItem();
-        HillClimb = new javax.swing.JMenuItem();
+        LocalSearch = new javax.swing.JMenuItem();
+        jMenu4 = new javax.swing.JMenu();
+        Grasp = new javax.swing.JMenuItem();
+        IterativeGreedy = new javax.swing.JMenuItem();
         SimAnn = new javax.swing.JMenuItem();
+        TabuSearch = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         testingButton = new javax.swing.JMenuItem();
         JMenuOut = new javax.swing.JMenu();
@@ -199,23 +202,56 @@ public class main_panel extends javax.swing.JFrame {
         jMenu2.setText("Heurísticas");
         jMenu2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
-        simpleClimb.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        simpleClimb.setText("Búsqueda Local");
-        simpleClimb.setToolTipText("La búsqueda se realiza desde una solución inicial que intentamos mejorar modificándola en torno a su vecindario de soluciones.");
-        simpleClimb.addMouseListener(new java.awt.event.MouseAdapter() {
+        LocalSearch.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        LocalSearch.setText("Búsqueda Local");
+        LocalSearch.setToolTipText("La búsqueda se realiza desde una solución inicial que intentamos mejorar modificándola en torno a su vecindario de soluciones.");
+        LocalSearch.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                simpleClimbMousePressed(evt);
+                LocalSearchMousePressed(evt);
             }
         });
-        jMenu2.add(simpleClimb);
+        jMenu2.add(LocalSearch);
 
-        HillClimb.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        HillClimb.setText("Escalada Máxima Pendiente");
-        jMenu2.add(HillClimb);
+        jMenu4.setText("Trayectorias");
+        jMenu4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+
+        Grasp.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        Grasp.setText("Grasp");
+        Grasp.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                GraspMousePressed(evt);
+            }
+        });
+        jMenu4.add(Grasp);
+
+        IterativeGreedy.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        IterativeGreedy.setText("Iterative Greedy");
+        IterativeGreedy.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                IterativeGreedyMousePressed(evt);
+            }
+        });
+        jMenu4.add(IterativeGreedy);
 
         SimAnn.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         SimAnn.setText("Enfriamiento Simulado");
-        jMenu2.add(SimAnn);
+        SimAnn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                SimAnnMousePressed(evt);
+            }
+        });
+        jMenu4.add(SimAnn);
+
+        TabuSearch.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        TabuSearch.setText("Búsqueda Tabú");
+        TabuSearch.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                TabuSearchMousePressed(evt);
+            }
+        });
+        jMenu4.add(TabuSearch);
+
+        jMenu2.add(jMenu4);
 
         jMenuBar1.add(jMenu2);
 
@@ -267,10 +303,10 @@ public class main_panel extends javax.swing.JFrame {
 	 * @param evt
 	 */
 	private void testingButtonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_testingButtonMousePressed
-		// TODO add your handling code here:
-		mainClass mc = new mainClass("Algoritmo de la mochila", "LocalSearch");
+
+		mainClass mc = new mainClass("Algoritmo de la mochila", "Trayectories");
 		XYSeriesCollection dataset = mc.initialise();
-		GenGraphic g = new GenGraphic(dataset, "LocalSearch");
+		GenGraphic g = new GenGraphic(dataset, "Trayectories");
 		ChartPanel chart = g.createChartPanel();
 		chart.setSize(new Dimension(DisplayPanel.getWidth(), DisplayPanel.getHeight()));
 		DisplayPanel.removeAll();
@@ -283,28 +319,27 @@ public class main_panel extends javax.swing.JFrame {
 	 * Función ejecutada al seleccionar la heuristica de Climb
 	 * @param evt
 	 */
-	private void simpleClimbMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_simpleClimbMousePressed
-		// TODO add your handling code here:
-		labelTitle.setText("Basados en trayectorias");
+	private void LocalSearchMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_LocalSearchMousePressed
+		
+		labelTitle.setText("Búsqueda Local");
 		_heuristicSelected = "LocalSearch";
 		jpanelList.setVisible(true);
-	}//GEN-LAST:event_simpleClimbMousePressed
+	}//GEN-LAST:event_LocalSearchMousePressed
 
 	/**
 	 * Función con la que obtenemos el algoritmo seleccionado de la lista
 	 * @param evt
 	 */
 	private void listAlgorithmsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listAlgorithmsMouseClicked
-		// TODO add your handling code here:
-
+		
 		switch (listAlgorithms.getSelectedValue()) {
 		case "Algoritmo de la mochila":
 			this.txtInfo.setVisible(true);
 			this.jpanelInfo.setVisible(true);
-                        this.txtInfo.setText("");
+			this.txtInfo.setText("");
 			this.txtInfo.append("El problema de la mochila, es un problema de optimización combinatoria."
-			                     + "\nModela una situación análoga al llenar una mochila con todo o parte de un conjunto de objetos, cada uno con un peso y valor específicos. \n\nLos objetos colocados en la mochila deben maximizar el valor total sin exceder el peso máximo.\n\n"
-                                             + "Algunos algoritmos existentes pueden resolverlo en la práctica para casos de un gran tamaño.\n ");
+			                    + "\nModela una situación análoga al llenar una mochila con todo o parte de un conjunto de objetos, cada uno con un peso y valor específicos. \n\nLos objetos colocados en la mochila deben maximizar el valor total sin exceder el peso máximo.\n\n"
+			                    + "Algunos algoritmos existentes pueden resolverlo en la práctica para casos de un gran tamaño.\n ");
 			this.startAlgorithm.setVisible(true);
 			break;
 		default:
@@ -316,7 +351,7 @@ public class main_panel extends javax.swing.JFrame {
 	 * @param evt
 	 */
 	private void startAlgorithmMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_startAlgorithmMouseClicked
-		// TODO add your handling code here:
+		
 		mainClass mc = new mainClass(listAlgorithms.getSelectedValue(), _heuristicSelected );
 
 		XYSeriesCollection dataset = mc.initialise();
@@ -328,11 +363,11 @@ public class main_panel extends javax.swing.JFrame {
 		DisplayPanel.add(chart);
 		DisplayPanel.validate();
 		DisplayPanel.repaint();
-                this.exportGraphic.setEnabled(true);
+		this.exportGraphic.setEnabled(true);
 	}//GEN-LAST:event_startAlgorithmMouseClicked
 
 	private void JMenuOutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JMenuOutMouseClicked
-		// TODO add your handling code here:
+		
 		int n = JOptionPane.showConfirmDialog(
 		            getParent(),
 		            "¿Seguro desea salir?",
@@ -343,12 +378,35 @@ public class main_panel extends javax.swing.JFrame {
 			this.dispose();
 	}//GEN-LAST:event_JMenuOutMouseClicked
 
-    private void exportGraphicMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exportGraphicMousePressed
+	private void exportGraphicMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exportGraphicMousePressed
+		
+		JOptionPane.showMessageDialog(this, "Gráfica exportada con éxito");
+		this.saveImage();
+		this.exportGraphic.setEnabled(false);
+	}//GEN-LAST:event_exportGraphicMousePressed
+
+    private void GraspMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_GraspMousePressed
+		labelTitle.setText("Basados en trayectorias");
+		_heuristicSelected = "Grasp";
+		jpanelList.setVisible(true);
+    }//GEN-LAST:event_GraspMousePressed
+
+    private void SimAnnMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SimAnnMousePressed
         // TODO add your handling code here:
-        JOptionPane.showMessageDialog(this, "Gráfica exportada con éxito");        
-        this.saveImage();
-        this.exportGraphic.setEnabled(false);
-    }//GEN-LAST:event_exportGraphicMousePressed
+    }//GEN-LAST:event_SimAnnMousePressed
+
+    private void TabuSearchMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TabuSearchMousePressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TabuSearchMousePressed
+
+    private void IterativeGreedyMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_IterativeGreedyMousePressed
+
+        labelTitle.setText("Basados en trayectorias");
+        _heuristicSelected = "IteratedGreedy";
+	jpanelList.setVisible(true);
+    }//GEN-LAST:event_IterativeGreedyMousePressed
+
+
 
 	/**
 	* Se realizan las comprobaciones iniciales y en caso de que no se cumpla, se ejecuta el método para crear la jerarquia
@@ -365,25 +423,25 @@ public class main_panel extends javax.swing.JFrame {
 			reset.createDirectoryHierarchy();
 		}
 	}
-        /**
-         * Función que permite exportar como fichero jpeg la gráfica obtenida
-         */
-        private void saveImage(){
-            BufferedImage imagebuf=null;
-            try {
-                imagebuf = new Robot().createScreenCapture(DisplayPanel.bounds());
-            } catch (AWTException e1) {
-               // TODO Auto-generated catch block
-            }  
-            Graphics2D graphics2D = imagebuf.createGraphics();
-            DisplayPanel.paint(graphics2D);
-            try {
-               ImageIO.write(imagebuf,"jpeg", new File(this._heuristicSelected+"_"+listAlgorithms.getSelectedValue()+".jpeg"));
-            } catch (IOException e) {
-               // TODO Auto-generated catch block
-           }
-        }       
-  
+	/**
+	 * Función que permite exportar como fichero jpeg la gráfica obtenida
+	 */
+	private void saveImage() {
+		BufferedImage imagebuf = null;
+		try {
+			imagebuf = new Robot().createScreenCapture(DisplayPanel.bounds());
+		} catch (AWTException e1) {
+			// TODO Auto-generated catch block
+		}
+		Graphics2D graphics2D = imagebuf.createGraphics();
+		DisplayPanel.paint(graphics2D);
+		try {
+			ImageIO.write(imagebuf, "jpeg", new File(this._heuristicSelected + "_" + listAlgorithms.getSelectedValue() + ".jpeg"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+		}
+	}
+
 	/**
 	 * @param args the command line arguments
 	 */
@@ -426,14 +484,18 @@ public class main_panel extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private java.awt.Panel DisplayPanel;
-    private javax.swing.JMenuItem HillClimb;
+    private javax.swing.JMenuItem Grasp;
+    private javax.swing.JMenuItem IterativeGreedy;
     private javax.swing.JMenu JMenuOut;
+    private javax.swing.JMenuItem LocalSearch;
     private javax.swing.JDialog ParamsDialog;
     private javax.swing.JMenuItem SimAnn;
+    private javax.swing.JMenuItem TabuSearch;
     private javax.swing.JMenuItem exportGraphic;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
@@ -441,13 +503,12 @@ public class main_panel extends javax.swing.JFrame {
     private javax.swing.JScrollPane jpanelList;
     private javax.swing.JLabel labelTitle;
     private javax.swing.JList<String> listAlgorithms;
-    private javax.swing.JMenuItem simpleClimb;
     private javax.swing.JButton startAlgorithm;
     private javax.swing.JMenuItem testingButton;
     private javax.swing.JTextArea txtInfo;
     // End of variables declaration//GEN-END:variables
 
-    private BufferedImage getScreenShot(Panel DisplayPanel) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+	private BufferedImage getScreenShot(Panel DisplayPanel) {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
 }

@@ -74,7 +74,7 @@ public class MQKPEvaluator {
         return MQKPEvaluator._numEvaluations;
     }
     
-    public double compare(double f1, double f2) {
+    public static double compare(double f1, double f2) {
         return (f1 - f2);
     }
 

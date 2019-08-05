@@ -3,16 +3,11 @@ package MainProgram;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.DateAxis;
 import org.jfree.chart.plot.Marker;
 import org.jfree.chart.plot.ValueMarker;
 import org.jfree.chart.plot.XYPlot;
@@ -20,6 +15,7 @@ import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.RectangleAnchor;
 import org.jfree.ui.TextAnchor;
+import java.awt.Font;
 
 public final class GenGraphic extends JFrame {
     ChartPanel chartPanel = null;
@@ -46,11 +42,18 @@ public final class GenGraphic extends JFrame {
         chPanel.setPreferredSize(new Dimension(785, 440));
         
         final XYPlot plot = chart.getXYPlot();
-        
+        plot.setBackgroundPaint(new Color(0xffffe0));
+        plot.setDomainGridlinesVisible(true);
+        plot.setDomainGridlinePaint(Color.lightGray);
+        plot.setRangeGridlinesVisible(true);
+        plot.setRangeGridlinePaint(Color.lightGray);
+
         for(int i = 0; i < this._dataset.getSeriesCount(); i++){
             final Marker start = new ValueMarker(this._dataset.getSeries(i).getMaxY());            
-            start.setLabel("BestFitness: "+this._dataset.getSeries(i).getMaxY());
+            start.setLabel(this._dataset.getSeries(i).getDescription()+": "+this._dataset.getSeries(i).getMaxY());
             start.setLabelAnchor(RectangleAnchor.BOTTOM_RIGHT);
+            Font font = new Font("TimesRoman", Font.PLAIN ,12);
+            start.setLabelFont(font);
             start.setLabelTextAnchor(TextAnchor.TOP_RIGHT);
             plot.addRangeMarker(start);            
         }

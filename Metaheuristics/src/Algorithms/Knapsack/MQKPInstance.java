@@ -5,6 +5,7 @@
  */
 package Algorithms.Knapsack;
 
+import BaseClasses.Instance;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -20,7 +21,7 @@ import java.util.Scanner;
  * Clase que almacena la información de una instancia del problema MQKP
  * @author i62gorej
  */
-public class MQKPInstance {
+public class MQKPInstance extends Instance{
     /*
     * _numKnapsack Entero que indica el número de mochilas que se va a considerar. Este no se lee del fichero, sino que lo establecéis vosotros
     * _numObjs Entero donde se almacenará el número de objetos del problema
@@ -114,19 +115,18 @@ public class MQKPInstance {
     public double getSumProfits(MQKPSolution solution) {
 
         double sumProfits = 0.;
-        int _numObjs = this._numObjs, indexX = 0, indexY = 0;
+        int numObj = this._numObjs, indexX = 0, indexY = 0;
 
-        for (int i = 0; i < _numObjs; i++) {
+        for (int i = 0; i < numObj; i++) {
             indexX = solution.whereIsObject(i);
 
             if (indexX > 0) {
                 sumProfits += this._profits[i][i];
-                for (int j = (i + 1); j < _numObjs; j++) {
+                for (int j = (i + 1); j < numObj; j++) {
                     indexY = solution.whereIsObject(j);
                     if (indexX == indexY) sumProfits += this._profits[i][j];
                 }
             }
-
         }
         return sumProfits;
     }
@@ -136,6 +136,7 @@ public class MQKPInstance {
     * @param numKnapsacks Entero que indica el número de mochilas que se va a considerar. Este no se lee del fichero, sino que lo establecéis vosotros
      * @throws java.io.FileNotFoundException
     */
+    @Override
     public void readInstance(String filename, int numKnapsacks) throws FileNotFoundException, IOException {
         //Establecemos y limpiamos la ruta donde se encuentra el archivo
         String url = new java.io.File(".").getCanonicalPath();
@@ -150,7 +151,6 @@ public class MQKPInstance {
         this.setKnapsacks(numKnapsacks);
         //Generamos una matriz auxiliar que posteriormente volcaremos a la de clase
         int[][] matrix = new int[numObj][numObj];
-
         //Establecemos la diagonal
         for (int i = 0; i < this._numObjs; ++i)
             matrix[i][i] = scanner.nextInt();
@@ -184,7 +184,6 @@ public class MQKPInstance {
         this._profits = matrix;
         this._weights = Weights;
         this._capacities = capacities;
-
     }
 
 
@@ -199,35 +198,27 @@ public class MQKPInstance {
     */
     public double getDeltaSumProfits(MQKPSolution solution, int indexObject,
                                      int indexKnapsack) {
-
         double deltaSumProfits = 0;
 
         /* Si el objeto estaba en una mochila, resta a deltaSumProfits su beneficio más el beneficio
          * conjunto con cualquier otro objeto que estuviese en esa misma mochila
          */
-
         int originKnapsack = solution.whereIsObject(indexObject);
 
         if (originKnapsack > 0) {
             deltaSumProfits -= this.getProfit(indexObject);
-
             for (int i = 0; i < this._numObjs; i++) {
-
                 if (solution.whereIsObject(i) == originKnapsack && i != indexObject) {
                     deltaSumProfits -= this.getProfit(indexObject, i);
                 }
             }
         }
-
         /* Si el objeto se va a insertar en alguna mochila, suma a deltaSumProfits su beneficio más el beneficio
          * conjunto con cualquier otro objeto que ya esté en dicha mochila
          */
-
         if (indexKnapsack > 0) {
             deltaSumProfits += this.getProfit(indexObject);
-
             for (int i = 0; i < _numObjs; i++) {
-
                 if (solution.whereIsObject(i) == indexKnapsack && i != indexObject) {
                     deltaSumProfits += this.getProfit(indexObject, i);
                 }
@@ -241,16 +232,14 @@ public class MQKPInstance {
     * @param perm Vector donde se almacenará la permutación
     */
     public static void randomPermutation(int size, ArrayList<Integer> perm) {
-
         /**
          * 1. Vacía el vector perm
          * 2. Llénalo con la permutación identidad
          * 3. Recórrelo intercambiando cada elemento con otro escogido de forma aleatoria.
          */
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < size; i++)
             perm.add(i);
-        }
-
+        
         Random rand = new Random();
         for (int i = 0; i < size; i++) {
             int pos = rand.nextInt(size);
@@ -258,7 +247,6 @@ public class MQKPInstance {
             perm.set(i, perm.get(pos));
             perm.set(pos, aux);
         }
-
     }
     
     
@@ -272,7 +260,6 @@ public class MQKPInstance {
     */        
     double getDeltaMaxCapacityViolation(MQKPSolution solution,
                                         int indexObject, int indexKnapsack) {
-
         /**
          * 1. Obten la mochila donde está el objeto
          * 2. Obten la máxima violación actual de la solución
@@ -286,7 +273,6 @@ public class MQKPInstance {
         solution.putObjectIn(indexObject, indexKnapsack);
         double newViolation = getMaxCapacityViolation(solution);
         solution.putObjectIn(indexObject, originKnapsack);
-
         return (newViolation - originViolation);
     }
     
