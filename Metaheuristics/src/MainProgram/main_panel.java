@@ -50,6 +50,8 @@ public class main_panel extends javax.swing.JFrame {
 		this.jpanelInfo.setVisible(false);
 		this.startAlgorithm.setVisible(false);
 		this.DisplayPanel.setVisible(true);
+                //jMenu3.setVisible(false);
+                
 	}
 
 	/**
@@ -69,10 +71,9 @@ public class main_panel extends javax.swing.JFrame {
         jpanelInfo = new javax.swing.JScrollPane();
         txtInfo = new javax.swing.JTextArea();
         startAlgorithm = new javax.swing.JButton();
-        DisplayPanel = new java.awt.Panel();
+        DisplayPanel = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
         exportGraphic = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         LocalSearch = new javax.swing.JMenuItem();
@@ -81,6 +82,9 @@ public class main_panel extends javax.swing.JFrame {
         IterativeGreedy = new javax.swing.JMenuItem();
         SimAnn = new javax.swing.JMenuItem();
         TabuSearch = new javax.swing.JMenuItem();
+        AllMH = new javax.swing.JMenuItem();
+        jMenu5 = new javax.swing.JMenu();
+        GeneticAlgorithm = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         testingButton = new javax.swing.JMenuItem();
         JMenuOut = new javax.swing.JMenu();
@@ -141,16 +145,19 @@ public class main_panel extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(startAlgorithm)
-                .addGap(145, 145, 145))
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(40, 40, 40)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(labelTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 345, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jpanelList, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jpanelInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(startAlgorithm)
+                        .addGap(145, 145, 145))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(labelTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 345, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jpanelList, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jpanelInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -166,13 +173,11 @@ public class main_panel extends javax.swing.JFrame {
                 .addGap(25, 25, 25))
         );
 
-        DisplayPanel.setBackground(new java.awt.Color(102, 102, 102));
-
         javax.swing.GroupLayout DisplayPanelLayout = new javax.swing.GroupLayout(DisplayPanel);
         DisplayPanel.setLayout(DisplayPanelLayout);
         DisplayPanelLayout.setHorizontalGroup(
             DisplayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 756, Short.MAX_VALUE)
+            .addGap(0, 733, Short.MAX_VALUE)
         );
         DisplayPanelLayout.setVerticalGroup(
             DisplayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -181,13 +186,11 @@ public class main_panel extends javax.swing.JFrame {
 
         jMenuBar1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
+        jMenu1.setBackground(java.awt.Color.lightGray);
         jMenu1.setText("Archivo");
         jMenu1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
-        jMenuItem1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jMenuItem1.setText("Abrir archivo");
-        jMenu1.add(jMenuItem1);
-
+        exportGraphic.setBackground(java.awt.Color.lightGray);
         exportGraphic.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         exportGraphic.setText("Exportar Gráfica");
         exportGraphic.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -199,6 +202,7 @@ public class main_panel extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu1);
 
+        jMenu2.setBackground(java.awt.Color.lightGray);
         jMenu2.setText("Heurísticas");
         jMenu2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
@@ -212,9 +216,11 @@ public class main_panel extends javax.swing.JFrame {
         });
         jMenu2.add(LocalSearch);
 
+        jMenu4.setBackground(java.awt.Color.lightGray);
         jMenu4.setText("Trayectorias");
         jMenu4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
+        Grasp.setBackground(java.awt.Color.lightGray);
         Grasp.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         Grasp.setText("Grasp");
         Grasp.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -224,6 +230,7 @@ public class main_panel extends javax.swing.JFrame {
         });
         jMenu4.add(Grasp);
 
+        IterativeGreedy.setBackground(java.awt.Color.lightGray);
         IterativeGreedy.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         IterativeGreedy.setText("Iterative Greedy");
         IterativeGreedy.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -233,6 +240,7 @@ public class main_panel extends javax.swing.JFrame {
         });
         jMenu4.add(IterativeGreedy);
 
+        SimAnn.setBackground(java.awt.Color.lightGray);
         SimAnn.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         SimAnn.setText("Enfriamiento Simulado");
         SimAnn.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -242,6 +250,7 @@ public class main_panel extends javax.swing.JFrame {
         });
         jMenu4.add(SimAnn);
 
+        TabuSearch.setBackground(java.awt.Color.lightGray);
         TabuSearch.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         TabuSearch.setText("Búsqueda Tabú");
         TabuSearch.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -251,7 +260,33 @@ public class main_panel extends javax.swing.JFrame {
         });
         jMenu4.add(TabuSearch);
 
+        AllMH.setBackground(java.awt.Color.lightGray);
+        AllMH.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        AllMH.setText("Todas las MH");
+        AllMH.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                AllMHMousePressed(evt);
+            }
+        });
+        jMenu4.add(AllMH);
+
         jMenu2.add(jMenu4);
+
+        jMenu5.setBackground(java.awt.Color.lightGray);
+        jMenu5.setText("Poblacionales");
+        jMenu5.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+
+        GeneticAlgorithm.setBackground(java.awt.Color.lightGray);
+        GeneticAlgorithm.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        GeneticAlgorithm.setText("Genetic Algorithm");
+        GeneticAlgorithm.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                GeneticAlgorithmMousePressed(evt);
+            }
+        });
+        jMenu5.add(GeneticAlgorithm);
+
+        jMenu2.add(jMenu5);
 
         jMenuBar1.add(jMenu2);
 
@@ -260,6 +295,8 @@ public class main_panel extends javax.swing.JFrame {
         jMenu3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
         testingButton.setText("Testing");
+        testingButton.setEnabled(false);
+        testingButton.setRequestFocusEnabled(false);
         testingButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 testingButtonMousePressed(evt);
@@ -269,6 +306,7 @@ public class main_panel extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu3);
 
+        JMenuOut.setBackground(java.awt.Color.lightGray);
         JMenuOut.setText("Salir");
         JMenuOut.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         JMenuOut.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -304,9 +342,9 @@ public class main_panel extends javax.swing.JFrame {
 	 */
 	private void testingButtonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_testingButtonMousePressed
 
-		mainClass mc = new mainClass("Algoritmo de la mochila", "Trayectories");
+		mainClass mc = new mainClass("Algoritmo de la mochila", "GeneticAlgorithm");
 		XYSeriesCollection dataset = mc.initialise();
-		GenGraphic g = new GenGraphic(dataset, "Trayectories");
+		GenGraphic g = new GenGraphic(dataset, "GeneticAlgorithm");
 		ChartPanel chart = g.createChartPanel();
 		chart.setSize(new Dimension(DisplayPanel.getWidth(), DisplayPanel.getHeight()));
 		DisplayPanel.removeAll();
@@ -324,6 +362,9 @@ public class main_panel extends javax.swing.JFrame {
 		labelTitle.setText("Búsqueda Local");
 		_heuristicSelected = "LocalSearch";
 		jpanelList.setVisible(true);
+                listAlgorithms.clearSelection();
+                txtInfo.setText("La busqueda local blabla");
+                startAlgorithm.setVisible(false);
 	}//GEN-LAST:event_LocalSearchMousePressed
 
 	/**
@@ -386,25 +427,78 @@ public class main_panel extends javax.swing.JFrame {
 	}//GEN-LAST:event_exportGraphicMousePressed
 
     private void GraspMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_GraspMousePressed
-		labelTitle.setText("Basados en trayectorias");
+       
+                labelTitle.setText("MH Grasp");
 		_heuristicSelected = "Grasp";
 		jpanelList.setVisible(true);
+                listAlgorithms.clearSelection();                
+                this.txtInfo.setVisible(true);
+		this.jpanelInfo.setVisible(true);
+		this.txtInfo.setText("");
+		this.txtInfo.append("GRASP es un procedimiento iterativo donde cada paso consiste en una fase de construcción y una de mejora.\n\n"
+                    + "En la fase de construcción se construye iterativamente una solución factible, añadiendo un elemento en cada paso. En cada iteración la elección del próximo elemento para ser añadido a la solución parcial viene determinado por una función greedy. Esta función mide el beneficio de añadir cada uno de los elementos y se elige la mejor."
+                    + "Se ha de saber que esta MH no tiene en cuenta qué ocurrirá en iteraciones sucesivas una vez que se hace una elección, sino únicamente en la iteración actual");
+		startAlgorithm.setVisible(false);                
     }//GEN-LAST:event_GraspMousePressed
 
     private void SimAnnMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SimAnnMousePressed
         // TODO add your handling code here:
+		labelTitle.setText("MH Enfriamiento Simulado");
+		_heuristicSelected = "SimulatedAnnealing";
+                listAlgorithms.clearSelection();                
+		jpanelList.setVisible(true);
+                this.txtInfo.setVisible(true);
+		this.jpanelInfo.setVisible(true);
+		this.txtInfo.setText("");
+		this.txtInfo.append("Es un algoritmo de búsqueda meta-heurística para problemas de optimización global; el objetivo general de este tipo de algoritmos es encontrar una buena aproximación al valor óptimo de una función en un espacio de búsqueda grande. A este valor óptimo se lo denomina \"óptimo global\""
+                    + "En cada iteración, el método evalúa algunos vecinos del estado actual s y probabilísticamente decide entre efectuar una transición a un nuevo estado S' o quedarse en el estado S. "
+                    + "El vecindario de un estado s está compuesto por todos los estados a los que se pueda llegar a partir de s mediante un cambio en la solución actual."
+                    + "A medida que la temperatura tiende al mínimo, la probabilidad de transición a un estado de mayor energía tiende a cero asintóticamente. Cuando T llega a cero, el algoritmo solo aceptará cambios a estados con menor energía. Debido a esta propiedad, la temperatura juega un papel muy importante en el control de la evolución del sistema. A temperaturas altas, el sistema tenderá a saltos de energía grandes entre los estados, mientras que a temperaturas más bajas, los cambios en energía serán menores.");
+		startAlgorithm.setVisible(false);	                      
     }//GEN-LAST:event_SimAnnMousePressed
 
     private void TabuSearchMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TabuSearchMousePressed
         // TODO add your handling code here:
+        labelTitle.setText("Búsqueda Tabú");
+        _heuristicSelected = "TabuSearch";
+        listAlgorithms.clearSelection();                
+        jpanelList.setVisible(true);       
+        this.txtInfo.setText("");
+        this.txtInfo.append("La búsqueda tabú es un método de optimización matemática, perteneciente a la clase de técnicas de búsqueda local.\n\n La búsqueda tabú aumenta el rendimiento del método de búsqueda local mediante el uso de estructuras de memoria: una vez que una potencial solución es determinada, se la marca como \"tabú\" de modo que el algoritmo no vuelva a visitar esa posible solución");
+        startAlgorithm.setVisible(false);            
     }//GEN-LAST:event_TabuSearchMousePressed
 
     private void IterativeGreedyMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_IterativeGreedyMousePressed
 
-        labelTitle.setText("Basados en trayectorias");
+        labelTitle.setText("MH Greedy Iterativo");
         _heuristicSelected = "IteratedGreedy";
+        listAlgorithms.clearSelection();        
 	jpanelList.setVisible(true);
+	this.txtInfo.setText("");
+	this.txtInfo.append("El Greedy Iterativo basa su funcionamiento en una conducta similar al GRASP."
+                + "De tal forma que a partir de una solución inicial, explorará el vecindario y se moverá a la mejor solución disopnible.\n\n"
+                + "Sin embargo, se procederá a realizar la destrucción parcial de la solución, de tal forma que así nos aseguramos que el IG, permita además de explotar un vecindario, explorar nuevos vecindarios que de otra forma podría no haber visitado.\n\n"
+                + "Por tanto, podemos definirlo con una fase de construcción, una segunda fase de destrucción de la solución y una última parte de reconstrucción de la solución.");
+        startAlgorithm.setVisible(false);    
     }//GEN-LAST:event_IterativeGreedyMousePressed
+
+    private void AllMHMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_AllMHMousePressed
+        // TODO add your handling code here:
+        listAlgorithms.clearSelection();        
+        labelTitle.setText("Basadas en Trayectorias");
+        _heuristicSelected = "AllTrayectories";
+	jpanelList.setVisible(true);
+        startAlgorithm.setVisible(false);
+    }//GEN-LAST:event_AllMHMousePressed
+
+    private void GeneticAlgorithmMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_GeneticAlgorithmMousePressed
+        // TODO add your handling code here:
+        listAlgorithms.clearSelection();        
+        labelTitle.setText("Algoritmos Poblacionales");
+        _heuristicSelected = "GeneticAlgorithm";
+	jpanelList.setVisible(true);
+        startAlgorithm.setVisible(false);        
+    }//GEN-LAST:event_GeneticAlgorithmMousePressed
 
 
 
@@ -483,7 +577,9 @@ public class main_panel extends javax.swing.JFrame {
 	}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private java.awt.Panel DisplayPanel;
+    private javax.swing.JMenuItem AllMH;
+    private javax.swing.JPanel DisplayPanel;
+    private javax.swing.JMenuItem GeneticAlgorithm;
     private javax.swing.JMenuItem Grasp;
     private javax.swing.JMenuItem IterativeGreedy;
     private javax.swing.JMenu JMenuOut;
@@ -496,8 +592,8 @@ public class main_panel extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
+    private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jpanelInfo;
     private javax.swing.JScrollPane jpanelList;

@@ -78,7 +78,7 @@ public class MQKPEvaluator {
         return (f1 - f2);
     }
 
-    public Boolean isToBeMinimised() {
+    public static Boolean isToBeMinimised() {
         return (compare(0, 1) > 0);
     }    
     

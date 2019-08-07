@@ -3,14 +3,17 @@ package BaseClasses;
 
 import Algorithms.Knapsack.MQKPNeighExplorer;
 import Algorithms.Knapsack.MQKPEvaluator;
+import Algorithms.Knapsack.MQKPGeneticAlgorithm;
 import Algorithms.Knapsack.MQKPGrasp;
 import Algorithms.Knapsack.MQKPInstance;
 import Algorithms.Knapsack.MQKPIteratedGreedy;
 import Algorithms.Knapsack.MQKPLocalSearch;
 import Algorithms.Knapsack.MQKPSimpleBestImprovement;
 import Algorithms.Knapsack.MQKPSimpleFirstImprovement;
+import Algorithms.Knapsack.MQKPSimulatedAnnealing;
 import Algorithms.Knapsack.MQKPSolGenerator;
 import Algorithms.Knapsack.MQKPSolution;
+import Algorithms.Knapsack.MQKPTabuSearch;
 import Algorithms.Knapsack.StopCondition;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -132,7 +135,76 @@ public class mainClass {
                                 this.runIGreedyExperiment(results, IG,serieIG, BestIG);
                                 dataset.addSeries(serieIG); 
                                 dataset.addSeries(BestIG); 
-                            break;                            
+                            break;
+                       case "SimulatedAnnealing":
+				generateOptionsKnapsackProblem();
+				generateDialog(120, 350,"Parámetros Knapsack");
+				MQKPInstance SimulatedAnnealing = new MQKPInstance();
+				try {
+					SimulatedAnnealing.readInstance("/Algorithms/Knapsack/exampleKnapsack.txt", this._numKnapSack);
+				} catch (IOException ex) {
+					Logger.getLogger(mainClass.class.getName()).log(Level.SEVERE, null, ex);
+				}				                                
+                                XYSeries serieSimulatedAnnealing = new XYSeries("SA");
+                                serieSimulatedAnnealing.setDescription("SA");                            
+                                this.runSAExperiment(results, SimulatedAnnealing, serieSimulatedAnnealing);
+                                dataset.addSeries(serieSimulatedAnnealing); 
+                              
+                            break;        
+                       case "TabuSearch":
+				generateOptionsKnapsackProblem();
+				generateDialog(120, 350,"Parámetros Knapsack");
+				MQKPInstance TabuSearch = new MQKPInstance();
+				try {
+					TabuSearch.readInstance("/Algorithms/Knapsack/exampleKnapsack.txt", this._numKnapSack);
+				} catch (IOException ex) {
+					Logger.getLogger(mainClass.class.getName()).log(Level.SEVERE, null, ex);
+				}				                                
+                                XYSeries serieTabuSearch = new XYSeries("TS");
+                                serieTabuSearch.setDescription("TS");                            
+                                this.runTSExperiment(results, TabuSearch, serieTabuSearch);
+                                dataset.addSeries(serieTabuSearch); 
+                            break;       
+                       case "AllTrayectories":
+				generateOptionsKnapsackProblem();
+				generateDialog(120, 350,"Parámetros Knapsack");
+				MQKPInstance instance = new MQKPInstance();
+				try {
+					instance.readInstance("/Algorithms/Knapsack/exampleKnapsack.txt", this._numKnapSack);
+				} catch (IOException ex) {
+					Logger.getLogger(mainClass.class.getName()).log(Level.SEVERE, null, ex);
+				}				                                
+                                XYSeries AllTabuSearch = new XYSeries("TS");
+                                XYSeries AllGrasp = new XYSeries("Grasp");
+                                XYSeries AllSimAnn = new XYSeries("SA");
+                                XYSeries AllIteratedGreedy = new XYSeries("IG");
+                                
+                                AllTabuSearch.setDescription("TS");   
+                                AllGrasp.setDescription("Grasp");   
+                                AllSimAnn.setDescription("SA");   
+                                AllIteratedGreedy.setDescription("IG");
+                                
+                                this.runAllTrayectoriesExperiment(results, instance, AllTabuSearch, AllGrasp ,AllSimAnn , AllIteratedGreedy);
+                                dataset.addSeries(AllSimAnn);
+                                dataset.addSeries(AllTabuSearch);         
+                                dataset.addSeries(AllGrasp); 
+                                dataset.addSeries(AllIteratedGreedy); 
+                                
+                            break; 
+                       case "GeneticAlgorithm":
+				//generateOptionsKnapsackProblem();
+				//generateDialog(120, 350,"Parámetros Knapsack");
+				MQKPInstance ga = new MQKPInstance();
+				try {
+					ga.readInstance("/Algorithms/Knapsack/exampleKnapsack.txt", 5/*this._numKnapSack*/);
+				} catch (IOException ex) {
+					Logger.getLogger(mainClass.class.getName()).log(Level.SEVERE, null, ex);
+				}				                                
+                                XYSeries serieGenetic = new XYSeries("GeneticAlgorithm");
+                                serieGenetic.setDescription("GeneticAlgorithm");                            
+                                this.runAGExperiment(results, ga, serieGenetic);
+                                dataset.addSeries(serieGenetic); 
+                            break;                             
 			default:
 				System.out.println("DEFAULT ENTRY");
 				break;
@@ -238,8 +310,7 @@ public class mainClass {
 		for (int i = 0; i < results.size(); i++)
 			serie.add(i+1, (double) results.get(i));                
                 //System.out.println("Total de iteraciones: "+numInitialSolutions+" y evaluator: "+MQKPEvaluator.getNumEvaluations());
-	}        
-        
+	}                
         public void runAGraspExperiment(ArrayList results, MQKPInstance instance, XYSeries serie, XYSeries bestSerie){
             MQKPSolution initialSolution = new MQKPSolution(instance);
             MQKPGrasp grasp = new MQKPGrasp();
@@ -298,5 +369,183 @@ public class mainClass {
                 bestSerie.add(i+1,Math.max(bestSerie.getMaxY(), (double) resultsIG.get(i)));                
             }
         }        
+        public void runSAExperiment(ArrayList results, MQKPInstance instance, XYSeries serie){
+            MQKPSolution initialSolution = new MQKPSolution(instance);
+            MQKPSimulatedAnnealing SA = new MQKPSimulatedAnnealing();
+            StopCondition stopCond = new StopCondition();
+            MQKPEvaluator.resetNumEvaluations();
+            SA.initialise(0.9, 10, 0.9999, 50, instance);
+            results.clear();
+            ArrayList <Double> BestofResults = new ArrayList<>();
+            stopCond.setConditions(MAX_SOLUTIONS_PER_RUN, 0, MAX_SECONS_PER_RUN);
+            
+            //Generar solución aleatoria para inicialiar la mejor solución
+            MQKPSolGenerator.genRandomSol(instance, initialSolution);
+            double currentFitness = MQKPEvaluator.computeFitness(instance, initialSolution);
+            initialSolution.setFitness(currentFitness);
+            BestofResults.add(currentFitness);
+            serie.add(0, currentFitness);
+            SA.setSolution(initialSolution);
+            //Ejecutamos Grasp
+            SA.run(stopCond);
+            
+            //Obtención de resultados
+            ArrayList<Double> resultsSA = SA.getResults();
+            
+            for(int i = 0; i < resultsSA.size(); i++){
+                serie.add(i+1, (double) resultsSA.get(i));                              
+            }
+        }            
+
+        public void runTSExperiment(ArrayList results, MQKPInstance instance, XYSeries serie){
+            MQKPSolution initialSolution = new MQKPSolution(instance);
+            MQKPTabuSearch TS = new MQKPTabuSearch();
+            StopCondition stopCond = new StopCondition();
+            MQKPEvaluator.resetNumEvaluations();
+            TS.initialise(instance, (int) (instance.getNumObjs()/2.5));
+            results.clear();
+            ArrayList <Double> BestofResults = new ArrayList<>();
+            stopCond.setConditions(MAX_SOLUTIONS_PER_RUN, 0, MAX_SECONS_PER_RUN);
+            
+            //Generar solución aleatoria para inicialiar la mejor solución
+            MQKPSolGenerator.genRandomSol(instance, initialSolution);
+            double currentFitness = MQKPEvaluator.computeFitness(instance, initialSolution);
+            initialSolution.setFitness(currentFitness);
+            BestofResults.add(currentFitness);
+            serie.add(0, currentFitness);
+            TS.setSolution(initialSolution);
+            //Ejecutamos Grasp
+            TS.run(stopCond);
+            
+            //Obtención de resultados
+            ArrayList<Double> resultsTS = TS.getResults();
+            
+            for(int i = 0; i < resultsTS.size(); i++){
+                serie.add(i+1, (double) resultsTS.get(i));                              
+            }
+        }
+        public void runAllTrayectoriesExperiment(ArrayList results, MQKPInstance instance, XYSeries AllTabuSearch, XYSeries AllGrasp, XYSeries AllSimAnn ,XYSeries AllIteratedGreedy){
+            MQKPSolution initialSolution = new MQKPSolution(instance);
+            MQKPTabuSearch TS = new MQKPTabuSearch();
+            StopCondition stopCond = new StopCondition();
+            MQKPEvaluator.resetNumEvaluations();
+            TS.initialise(instance, (int) (instance.getNumObjs()/2.5));
+            results.clear();
+            ArrayList <Double> BestofResults = new ArrayList<>();
+            stopCond.setConditions(MAX_SOLUTIONS_PER_RUN, 0, MAX_SECONS_PER_RUN);
+            
+            //Generar solución aleatoria para inicialiar la mejor solución
+            MQKPSolGenerator.genRandomSol(instance, initialSolution);
+            double currentFitness = MQKPEvaluator.computeFitness(instance, initialSolution);
+            initialSolution.setFitness(currentFitness);
+            BestofResults.add(currentFitness);
+            AllTabuSearch.add(0, currentFitness);
+            TS.setSolution(initialSolution);
+            //Ejecutamos Grasp
+            TS.run(stopCond);
+            
+            //Obtención de resultados
+            ArrayList<Double> resultsTS = TS.getResults();
+            
+            for(int i = 0; i < resultsTS.size(); i++){
+                AllTabuSearch.add(i+1, (double) resultsTS.get(i));                              
+            }
+            
+            /**********************************************************/
+
+            MQKPSimulatedAnnealing SA = new MQKPSimulatedAnnealing();
+            MQKPEvaluator.resetNumEvaluations();
+            SA.initialise(0.9, 10, 0.9999, 50, instance);
+            results.clear();
+            stopCond.setConditions(4000, 0, MAX_SECONS_PER_RUN);
+            
+            //Generar solución aleatoria para inicialiar la mejor solución
+            MQKPSolGenerator.genRandomSol(instance, initialSolution);
+            currentFitness = MQKPEvaluator.computeFitness(instance, initialSolution);
+            initialSolution.setFitness(currentFitness);
+
+            AllSimAnn.add(0, currentFitness);
+            SA.setSolution(initialSolution);
+            //Ejecutamos Grasp
+            SA.run(stopCond);
+            
+            //Obtención de resultados
+            ArrayList<Double> resultsSA = SA.getResults();
+            
+            for(int i = 0; i < resultsSA.size(); i++){
+                AllSimAnn.add(i+1, (double) resultsSA.get(i));                              
+            }  
+            
+            /**********************************************************/
+
+            MQKPIteratedGreedy ig = new MQKPIteratedGreedy();
+
+            MQKPEvaluator.resetNumEvaluations();
+            ig.initialise(0.25, instance);
+            results.clear();
+
+            stopCond.setConditions(MAX_SOLUTIONS_PER_RUN, 0, MAX_SECONS_PER_RUN);
+            
+            //Generar solución aleatoria para inicialiar la mejor solución
+            MQKPSolGenerator.genRandomSol(instance, initialSolution);
+            currentFitness = MQKPEvaluator.computeFitness(instance, initialSolution);
+            initialSolution.setFitness(currentFitness);
+            BestofResults.add(currentFitness);
+            double bestFitness = currentFitness;
+            AllIteratedGreedy.add(0, currentFitness);
+
+            //Ejecutamos Grasp
+            ig.run(stopCond);
+            
+            //Obtención de resultados
+            ArrayList<Double> resultsIG = ig.getResults();
+            
+            for(int i = 0; i < resultsIG.size(); i++)
+                AllIteratedGreedy.add(i+1, (double) resultsIG.get(i));                               
+            
+            /************************************************************/
+            MQKPGrasp grasp = new MQKPGrasp();
+            MQKPEvaluator.resetNumEvaluations();
+            grasp.initialise(0.25, instance);
+            results.clear();
+
+            stopCond.setConditions(MAX_SOLUTIONS_PER_RUN, 0, MAX_SECONS_PER_RUN);
+            //Generar solución aleatoria para inicialiar la mejor solución
+            MQKPSolGenerator.genRandomSol(instance, initialSolution);
+            currentFitness = MQKPEvaluator.computeFitness(instance, initialSolution);
+            initialSolution.setFitness(currentFitness);
+            BestofResults.add(currentFitness);
+
+            AllGrasp.add(0, currentFitness);
+            //Ejecutamos Grasp
+            grasp.run(stopCond);
+            
+            //Obtención de resultados
+            ArrayList<Double> resultsGrasp = grasp.getResults();
+            
+            for(int i = 0; i < resultsGrasp.size(); i++)
+                AllGrasp.add(i+1, (double) resultsGrasp.get(i));              
+        }
+        public void runAGExperiment(ArrayList results, MQKPInstance instance,XYSeries serieGenetic){
+	//Inicialización
+            MQKPGeneticAlgorithm ga = new MQKPGeneticAlgorithm();
+            StopCondition stopCond = new StopCondition();
+            MQKPEvaluator.resetNumEvaluations();
+            ga.initialise(60, instance);
+            stopCond.setConditions(MAX_SOLUTIONS_PER_RUN, 0, MAX_SECONS_PER_RUN);
+            
+            //Ejecutar el GA
+            ga.run(stopCond);
+           
+            //Almacenar los resultados
+            ArrayList<Double> resultsGA = ga.getResults();
+            ArrayList<Double> bestSoFarResults = ga.getBestsPerIterations();
+            for(int i = 0; i < bestSoFarResults.size();i++)                    
+                serieGenetic.add(i, (double)bestSoFarResults.get(i));
+            
+        }
+
+        
 }
+       
 

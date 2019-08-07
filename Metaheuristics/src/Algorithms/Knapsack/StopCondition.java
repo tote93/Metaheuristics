@@ -5,8 +5,6 @@
  */
 package Algorithms.Knapsack;
 
-import javax.swing.Timer;
-
 /**
  *
  * @author i62gorej
@@ -43,7 +41,8 @@ public class StopCondition {
 
 		if (_maxIterations > 0 && _numIterations >= _maxIterations)
 			result = true;
- 
+ 		if (_maxTime > 0 && (System.currentTimeMillis()/1000 - _start) >= _maxTime)
+			result = true;
 		return result;            
         }
 	/**

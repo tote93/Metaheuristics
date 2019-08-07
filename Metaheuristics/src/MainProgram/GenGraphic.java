@@ -1,6 +1,7 @@
 package MainProgram;
 
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -16,6 +17,7 @@ import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.RectangleAnchor;
 import org.jfree.ui.TextAnchor;
 import java.awt.Font;
+import org.jfree.chart.axis.NumberAxis;
 
 public final class GenGraphic extends JFrame {
     ChartPanel chartPanel = null;
@@ -35,28 +37,65 @@ public final class GenGraphic extends JFrame {
 
         XYDataset dataset = this._dataset;
 
-        JFreeChart chart = ChartFactory.createXYLineChart(chartTitle,
+        JFreeChart chart;
+        if(this._title.equals("GeneticAlgorithm")){
+            chart = ChartFactory.createScatterPlot(chartTitle,
                            xAxisLabel, yAxisLabel, dataset);
-        ChartPanel chPanel = new ChartPanel(chart);
+            ChartPanel chPanel = new ChartPanel(chart);
+            chPanel.setPreferredSize(new Dimension(785, 440));
 
-        chPanel.setPreferredSize(new Dimension(785, 440));
-        
-        final XYPlot plot = chart.getXYPlot();
-        plot.setBackgroundPaint(new Color(0xffffe0));
-        plot.setDomainGridlinesVisible(true);
-        plot.setDomainGridlinePaint(Color.lightGray);
-        plot.setRangeGridlinesVisible(true);
-        plot.setRangeGridlinePaint(Color.lightGray);
+            final XYPlot plot = (XYPlot) chart.getPlot();
+            plot.setDomainPannable(true);
+            plot.setRangePannable(true);
+            plot.setDomainZeroBaselineVisible(true);
+            plot.setRangeZeroBaselineVisible(true);
 
-        for(int i = 0; i < this._dataset.getSeriesCount(); i++){
-            final Marker start = new ValueMarker(this._dataset.getSeries(i).getMaxY());            
-            start.setLabel(this._dataset.getSeries(i).getDescription()+": "+this._dataset.getSeries(i).getMaxY());
-            start.setLabelAnchor(RectangleAnchor.BOTTOM_RIGHT);
-            Font font = new Font("TimesRoman", Font.PLAIN ,12);
-            start.setLabelFont(font);
-            start.setLabelTextAnchor(TextAnchor.TOP_RIGHT);
-            plot.addRangeMarker(start);            
+            plot.setDomainGridlineStroke(new BasicStroke(0.0f));
+            plot.setDomainMinorGridlineStroke(new BasicStroke(0.0f));
+            plot.setDomainGridlinePaint(Color.blue);
+            plot.setRangeGridlineStroke(new BasicStroke(0.0f));
+            plot.setRangeMinorGridlineStroke(new BasicStroke(0.0f));
+            plot.setRangeGridlinePaint(Color.blue);
+
+            plot.setDomainMinorGridlinesVisible(true);
+            plot.setRangeMinorGridlinesVisible(true);
+
+            NumberAxis domainAxis = (NumberAxis) plot.getDomainAxis();
+            domainAxis.setAutoRangeIncludesZero(false);
+            for(int i = 0; i < this._dataset.getSeriesCount(); i++){
+                final Marker start = new ValueMarker(this._dataset.getSeries(i).getMaxY());            
+                start.setLabel(this._dataset.getSeries(i).getDescription()+": "+this._dataset.getSeries(i).getMaxY());
+                start.setLabelAnchor(RectangleAnchor.BOTTOM_RIGHT);
+                Font font = new Font("TimesRoman", Font.PLAIN ,12);
+                start.setLabelFont(font);
+                start.setLabelTextAnchor(TextAnchor.TOP_RIGHT);
+                plot.addRangeMarker(start);            
+            }
+            return chPanel;             
         }
-        return chPanel;
+        else{
+            chart  = ChartFactory.createXYLineChart(chartTitle,
+                           xAxisLabel, yAxisLabel, dataset);
+            ChartPanel chPanel = new ChartPanel(chart);
+            chPanel.setPreferredSize(new Dimension(785, 440));
+            
+            final XYPlot plot = chart.getXYPlot();
+            plot.setBackgroundPaint(new Color(0xffffe0));
+            plot.setDomainGridlinesVisible(true);
+            plot.setDomainGridlinePaint(Color.lightGray);
+            plot.setRangeGridlinesVisible(true);
+            plot.setRangeGridlinePaint(Color.lightGray);
+
+            for(int i = 0; i < this._dataset.getSeriesCount(); i++){
+                final Marker start = new ValueMarker(this._dataset.getSeries(i).getMaxY());            
+                start.setLabel(this._dataset.getSeries(i).getDescription()+": "+this._dataset.getSeries(i).getMaxY());
+                start.setLabelAnchor(RectangleAnchor.BOTTOM_RIGHT);
+                Font font = new Font("TimesRoman", Font.PLAIN ,12);
+                start.setLabelFont(font);
+                start.setLabelTextAnchor(TextAnchor.TOP_RIGHT);
+                plot.addRangeMarker(start);            
+            }
+            return chPanel;            
+        }                
     }
 }
