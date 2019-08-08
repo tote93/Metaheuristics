@@ -200,10 +200,12 @@ public class mainClass {
 				} catch (IOException ex) {
 					Logger.getLogger(mainClass.class.getName()).log(Level.SEVERE, null, ex);
 				}				                                
-                                XYSeries serieGenetic = new XYSeries("GeneticAlgorithm");
-                                serieGenetic.setDescription("GeneticAlgorithm");                            
-                                this.runAGExperiment(results, ga, serieGenetic);
-                                dataset.addSeries(serieGenetic); 
+                                XYSeries currentGenetic = new XYSeries("GeneticAlgorithm");
+                                XYSeries bestGenetic = new XYSeries("BestGenAlgorithm");
+                                bestGenetic.setDescription("BestGenAlgorithm");
+                                this.runAGExperiment(results, ga, currentGenetic, bestGenetic);
+                                dataset.addSeries(currentGenetic); 
+                                dataset.addSeries(bestGenetic); 
                             break;                             
 			default:
 				System.out.println("DEFAULT ENTRY");
@@ -526,7 +528,7 @@ public class mainClass {
             for(int i = 0; i < resultsGrasp.size(); i++)
                 AllGrasp.add(i+1, (double) resultsGrasp.get(i));              
         }
-        public void runAGExperiment(ArrayList results, MQKPInstance instance,XYSeries serieGenetic){
+        public void runAGExperiment(ArrayList results, MQKPInstance instance,XYSeries serieGenetic, XYSeries bestGenetic){
 	//Inicialización
             MQKPGeneticAlgorithm ga = new MQKPGeneticAlgorithm();
             StopCondition stopCond = new StopCondition();
@@ -539,10 +541,17 @@ public class mainClass {
            
             //Almacenar los resultados
             ArrayList<Double> resultsGA = ga.getResults();
-            ArrayList<Double> bestSoFarResults = ga.getBestsPerIterations();
-            for(int i = 0; i < bestSoFarResults.size();i++)                    
-                serieGenetic.add(i, (double)bestSoFarResults.get(i));
-            
+            ArrayList<Double> bestSoFarResults = new ArrayList<>();
+
+            for(int i = 0; i < resultsGA.size();i++){  
+                
+		if (bestSoFarResults.size() > 0)
+                    bestSoFarResults.add(Math.max(bestSoFarResults.get(bestSoFarResults.size()-1), resultsGA.get(i)));
+		else
+                    bestSoFarResults.add(resultsGA.get(i)); 
+                serieGenetic.add(i, resultsGA.get(i));
+                bestGenetic.add(i, (double)bestSoFarResults.get(i));
+            }            
         }
 
         

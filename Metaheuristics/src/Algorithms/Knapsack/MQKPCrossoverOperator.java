@@ -24,7 +24,7 @@ public class MQKPCrossoverOperator {
 	MQKPInstance _instance;
 	int _numObjs;
 	double _crossProb;
-
+        
 	/**
 	 * Función que cruza dos soluciones según su probabilidad de cruce. En caso de que no haya crucce, la solución devuelta será igual al primer padre
 	 * @param s1 primer padre

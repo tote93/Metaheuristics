@@ -113,7 +113,7 @@ public class main_panel extends javax.swing.JFrame {
 
         listAlgorithms.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         listAlgorithms.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Algoritmo de la mochila", "Algoritmo de mis pelotis" };
+            String[] strings = { "Algoritmo de la mochila", "Proximamente..." };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });

@@ -38,7 +38,7 @@ public final class GenGraphic extends JFrame {
         XYDataset dataset = this._dataset;
 
         JFreeChart chart;
-        if(this._title.equals("GeneticAlgorithm")){
+        if(this._title.equals("TestingGA")){//GeneticAlgorithm
             chart = ChartFactory.createScatterPlot(chartTitle,
                            xAxisLabel, yAxisLabel, dataset);
             ChartPanel chPanel = new ChartPanel(chart);
@@ -61,15 +61,17 @@ public final class GenGraphic extends JFrame {
             plot.setRangeMinorGridlinesVisible(true);
 
             NumberAxis domainAxis = (NumberAxis) plot.getDomainAxis();
-            domainAxis.setAutoRangeIncludesZero(false);
+            //domainAxis.setAutoRangeIncludesZero(false);
             for(int i = 0; i < this._dataset.getSeriesCount(); i++){
-                final Marker start = new ValueMarker(this._dataset.getSeries(i).getMaxY());            
-                start.setLabel(this._dataset.getSeries(i).getDescription()+": "+this._dataset.getSeries(i).getMaxY());
-                start.setLabelAnchor(RectangleAnchor.BOTTOM_RIGHT);
-                Font font = new Font("TimesRoman", Font.PLAIN ,12);
-                start.setLabelFont(font);
-                start.setLabelTextAnchor(TextAnchor.TOP_RIGHT);
-                plot.addRangeMarker(start);            
+                final Marker start = new ValueMarker(this._dataset.getSeries(i).getMaxY());  
+                if(this._dataset.getSeries(i).getDescription() != null){
+                    start.setLabel(this._dataset.getSeries(i).getDescription()+": "+this._dataset.getSeries(i).getMaxY());
+                    start.setLabelAnchor(RectangleAnchor.BOTTOM_RIGHT);
+                    Font font = new Font("TimesRoman", Font.PLAIN ,12);
+                    start.setLabelFont(font);
+                    start.setLabelTextAnchor(TextAnchor.TOP_RIGHT);
+                    plot.addRangeMarker(start);                    
+                }
             }
             return chPanel;             
         }
@@ -87,13 +89,15 @@ public final class GenGraphic extends JFrame {
             plot.setRangeGridlinePaint(Color.lightGray);
 
             for(int i = 0; i < this._dataset.getSeriesCount(); i++){
-                final Marker start = new ValueMarker(this._dataset.getSeries(i).getMaxY());            
-                start.setLabel(this._dataset.getSeries(i).getDescription()+": "+this._dataset.getSeries(i).getMaxY());
-                start.setLabelAnchor(RectangleAnchor.BOTTOM_RIGHT);
-                Font font = new Font("TimesRoman", Font.PLAIN ,12);
-                start.setLabelFont(font);
-                start.setLabelTextAnchor(TextAnchor.TOP_RIGHT);
-                plot.addRangeMarker(start);            
+                final Marker start = new ValueMarker(this._dataset.getSeries(i).getMaxY());  
+                if(this._dataset.getSeries(i).getDescription() != null){
+                    start.setLabel(this._dataset.getSeries(i).getDescription()+": "+this._dataset.getSeries(i).getMaxY());
+                    start.setLabelAnchor(RectangleAnchor.BOTTOM_RIGHT);
+                    Font font = new Font("TimesRoman", Font.PLAIN ,12);
+                    start.setLabelFont(font);
+                    start.setLabelTextAnchor(TextAnchor.TOP_RIGHT);
+                    plot.addRangeMarker(start);                    
+                }
             }
             return chPanel;            
         }                

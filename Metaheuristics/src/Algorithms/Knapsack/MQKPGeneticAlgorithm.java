@@ -56,7 +56,7 @@ public class MQKPGeneticAlgorithm extends MQKPMetaheuristics{
 
 		for(int i=1; i < set.size(); i++){
 			if(MQKPEvaluator.compare(set.get(i).getFitness(), set.get(indexBest).getFitness()) > 0)
-				indexBest = i;
+                            indexBest = i;
 		}
 
 
@@ -75,7 +75,7 @@ public class MQKPGeneticAlgorithm extends MQKPMetaheuristics{
 
 		for(int i=1; i < set.size(); i++){
 			if(MQKPEvaluator.compare(set.get(i).getFitness(), set.get(indexWorst).getFitness()) < 0)
-				indexWorst = i;
+                            indexWorst = i;
 		}
 
 		return indexWorst;
@@ -83,7 +83,7 @@ public class MQKPGeneticAlgorithm extends MQKPMetaheuristics{
 
 	/**
 	 * Función que actualiza la nueva población, dado el conjunto de descendientes generado
-	 * @param[in] offspring Vector de soluciones descendientes generadas
+	 * @param offspring Vector de soluciones descendientes generadas
 	 */
 	void selectNewPopulation(ArrayList<Solution> offspring) {
 
@@ -125,30 +125,24 @@ public class MQKPGeneticAlgorithm extends MQKPMetaheuristics{
 
 	/**
 	 * Función que evalúa las soluciones de un ArrayList
-	 * @param[in,out] set Conjunto de soluciones a evaluar. Una vez evaluados, les asigna el fitness
+	 * @param set Conjunto de soluciones a evaluar. Una vez evaluados, les asigna el fitness
 	 */
 	void evaluate(ArrayList<Solution> set) {
 
-		for (Solution sol:  set) {
-			MQKPSolution s = (MQKPSolution) sol;
-
-			/**
-			 * Se ha añadido una funcionalidad en Solution para detectar si su fitness ya estaba calculado,
-			 * útil para cuando el descendiente es copia del padre. Por tanto, sólo se evaluarán las soluciones
-			 * que no tentan un fitness válido
-			 */
-			if (!(s.hasValidFitness())) {
-
-				//Evaluar
-				double fitness = MQKPEvaluator.computeFitness((this . _instance), s);
-                                _results.add(fitness);
-				s.setFitness(fitness);
-
-				//Actualizar la mejor solución
-				if (MQKPEvaluator.compare(fitness, _bestSolution.getFitness()) > 0)
-					_bestSolution.copy(s);				
-			}
-		}
+            set.stream().map((sol) -> (MQKPSolution) sol).filter((s) -> (!(s.hasValidFitness()))).forEachOrdered((s) -> {
+                //Evaluar
+                double fitness = MQKPEvaluator.computeFitness((this . _instance), s);
+                _results.add(fitness);
+                s.setFitness(fitness);
+                //Actualizar la mejor solución
+                if (MQKPEvaluator.compare(fitness, _bestSolution.getFitness()) > 0) {
+                    _bestSolution.copy(s);
+                }
+            }); /**
+             * Se ha añadido una funcionalidad en Solution para detectar si su fitness ya estaba calculado,
+             * útil para cuando el descendiente es copia del padre. Por tanto, sólo se evaluarán las soluciones
+             * que no tentan un fitness válido
+             */
 	}
 
 	/**
@@ -246,10 +240,9 @@ public class MQKPGeneticAlgorithm extends MQKPMetaheuristics{
                         _popMeanResults.add(computeMeanFitness(_population));
 
 			bestSolIndex = indexBest(_population);
-			_bestPerIterations.add(
-					_population.get(bestSolIndex).getFitness());
+			_bestPerIterations.add(_population.get(bestSolIndex).getFitness());
 			if(MQKPEvaluator.compare(_bestPerIterations.get(_bestPerIterations.size()-1), _bestSolution.getFitness()) > 0)
-				_bestSolution.copy(_population.get(bestSolIndex));
+                            _bestSolution =(MQKPSolution) _population.get(bestSolIndex);
 
 			//Seleccionar los padres
 			ArrayList<Solution> parents = new ArrayList<>();
@@ -278,8 +271,7 @@ public class MQKPGeneticAlgorithm extends MQKPMetaheuristics{
 		_popMeanResults.add(computeMeanFitness(_population));
 
 		bestSolIndex = indexBest(_population);
-		_bestPerIterations.add(
-				_population.get(bestSolIndex).getFitness());
+		_bestPerIterations.add(_population.get(bestSolIndex).getFitness());
 		if(MQKPEvaluator.compare(_bestPerIterations.get(_bestPerIterations.size()-1), _bestSolution.getFitness()) > 0)
 			_bestSolution.copy(_population.get(bestSolIndex));
 	}
@@ -296,11 +288,6 @@ public class MQKPGeneticAlgorithm extends MQKPMetaheuristics{
 			System.out.println("The population size must be greater than 0");
 			exit(1);
 		}
-
-		if (_bestSolution != null) {
-			_bestSolution = null;
-		}
-
 		_bestSolution = new MQKPSolution(_instance);
 		MQKPSolGenerator.genRandomSol(_instance, _bestSolution);
 		double fitness = MQKPEvaluator.computeFitness(_instance, _bestSolution);
@@ -335,12 +322,9 @@ public class MQKPGeneticAlgorithm extends MQKPMetaheuristics{
 
 	/**
 	 * Función que asigna un nuevo operador de cruce
+         * @param crossoverOp
 	 */
 	public void setCrossoverOp(MQKPCrossoverOperator crossoverOp) {
-
-		//if (_crossoverOp != null)
-			//_crossoverOp = new MQKPCrossoverOperator();
-
 		_crossoverOp = crossoverOp;
 	}
 
@@ -348,9 +332,6 @@ public class MQKPGeneticAlgorithm extends MQKPMetaheuristics{
 	 * Función que asigna un nuevo operador de mutación
 	 */
 	void setMutOp(MQKPMutationOperator mutOp) {
-
-/*		if (_mutOp != null)
-			delete _mutOp;*/
 		_mutOp = mutOp;
 	}
 
@@ -358,10 +339,6 @@ public class MQKPGeneticAlgorithm extends MQKPMetaheuristics{
 	 * Función que asigna un nuevo operador de selección
 	 */
 	void setSelector(SelectionOperator selector) {
-/*
-		if (_selector != null)
-			delete _selector;*/
-
 		_selector = selector;
 	}
 

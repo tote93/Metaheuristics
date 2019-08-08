@@ -41,7 +41,7 @@ public class StopCondition {
 
 		if (_maxIterations > 0 && _numIterations >= _maxIterations)
 			result = true;
- 		if (_maxTime > 0 && (System.currentTimeMillis()/1000 - _start) >= _maxTime)
+ 		if (_maxTime > 0 && ((System.currentTimeMillis()/1000 -_start)/1000F) >= _maxTime)
 			result = true;
 		return result;            
         }
@@ -55,7 +55,7 @@ public class StopCondition {
 		_maxEvaluations = maxEvaluations;
 		_maxIterations = maxIterations;
 		_maxTime = maxTime;
-		_start = System.currentTimeMillis()/1000;
+                _start = System.currentTimeMillis();
 	}
       	/**
 	 * Función que notifica al objeto condición de parada que se ha ejecutado una nueva iteración de la metaheurística
