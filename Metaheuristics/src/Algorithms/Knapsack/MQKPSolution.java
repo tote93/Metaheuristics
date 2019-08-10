@@ -67,26 +67,16 @@ public class MQKPSolution implements Solution{
         _fitness = fitness;
         _fitnessAssigned = true;
     }
-    /**
-    * Función que copia la información de otra solución
-    * @param solution La solución de donde copiar la información
-    */   
-    public void copy(MQKPSolution solution){
-        for(int i = 0; i < this._numObjs; i++){
-            this._sol.set(i, solution._sol.get(i));
-        }
-        this._fitness = solution.getFitness();
-        this._fitnessAssigned = solution._fitnessAssigned;
-    }
-
 
     @Override
     public void copy(Solution solution) {
+        MQKPSolution auxSol = (MQKPSolution) solution;
+        
         for(int i = 0; i < this._numObjs; i++){
-            this._sol.set(i, Solution._sol.get(i));
+            this._sol.set(i, auxSol._sol.get(i));
         }
-        this._fitness = solution.getFitness();
-        this._fitnessAssigned = Solution._fitnessAssigned;        
+        this._fitness = auxSol.getFitness();
+        this._fitnessAssigned = auxSol._fitnessAssigned;        
     }
 	/**
 	 * Función que indica si el fitness de la solución es válido (deja de serlo si se cambia un objeto de mochila; y se convierte en válido cuando se le asigna)

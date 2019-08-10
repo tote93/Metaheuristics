@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -48,6 +49,11 @@ public class mainClass {
 	JDialog _dialog = new JDialog(_frame , "", true);
 	// Variable necesaria para obtener las mochilas
 	private int _numKnapSack = 0;
+        private double _mutatePercent = 0.25;
+        private double _crossPercent = 0.8;
+        private int _numberTournament = 2;
+        private String _selector = "";
+        private String _mutate = "";
 	// Parametros de parada de las heuristicas
 	int MAX_SOLUTIONS_PER_RUN = 100000;
 	int MAX_INITIAL_SOLUTIONS = 5;
@@ -81,7 +87,7 @@ public class mainClass {
 			switch (_heuristic) {
 			case "LocalSearch":
 				generateOptionsKnapsackProblem();
-				generateDialog(120, 350,"Parámetros Knapsack");
+				generateDialog(120, 350,"Parámetros Knapsack Problem");
 				//Fin de la generación del modal
 				MQKPInstance climb = new MQKPInstance();
 				try {
@@ -100,7 +106,7 @@ public class mainClass {
                                 serieBest.setDescription("Escalada Max. Pendiente");
                                 MQKPSimpleBestImprovement  bestExplorer = new MQKPSimpleBestImprovement();
                                 this.runALSExperiment(results, climb, bestExplorer, serieBest);
-                                dataset.addSeries(serieBest);                                
+                                dataset.addSeries(serieBest); 
 				break;
                         case "Grasp":
 				generateOptionsKnapsackProblem();
@@ -117,7 +123,8 @@ public class mainClass {
                                 BestGrasp.setDescription("BestGrasp");                                
                                 this.runAGraspExperiment(results, Grasp,serieGrasp, BestGrasp);
                                 dataset.addSeries(serieGrasp); 
-                                dataset.addSeries(BestGrasp); 
+                                dataset.addSeries(BestGrasp);
+                                                                
                             break;
                         case "IteratedGreedy":
 				generateOptionsKnapsackProblem();
@@ -192,15 +199,15 @@ public class mainClass {
                                 
                             break; 
                        case "GeneticAlgorithm":
-				//generateOptionsKnapsackProblem();
-				//generateDialog(120, 350,"Parámetros Knapsack");
+				generateOptionsGAKnapsackProblem();
+				generateDialog(300, 550,"Parámetros Knapsack");
 				MQKPInstance ga = new MQKPInstance();
 				try {
-					ga.readInstance("/Algorithms/Knapsack/exampleKnapsack.txt", 5/*this._numKnapSack*/);
+					ga.readInstance("/Algorithms/Knapsack/exampleKnapsack.txt", this._numKnapSack);
 				} catch (IOException ex) {
 					Logger.getLogger(mainClass.class.getName()).log(Level.SEVERE, null, ex);
 				}				                                
-                                XYSeries currentGenetic = new XYSeries("GeneticAlgorithm");
+                                XYSeries currentGenetic = new XYSeries("CurrentGenetic");
                                 XYSeries bestGenetic = new XYSeries("BestGenAlgorithm");
                                 bestGenetic.setDescription("BestGenAlgorithm");
                                 this.runAGExperiment(results, ga, currentGenetic, bestGenetic);
@@ -228,6 +235,7 @@ public class mainClass {
             //Tras el titulo, insertamos un campo de texto para el número de mochilas
             JTextField txt = new JTextField();
             txt.setHorizontalAlignment(JTextField.CENTER);
+            txt.setText("5");
             _dialog.add(txt);
             //Insertamos el boton de validar los datos
             JButton btn = new JButton("Validar");
@@ -332,7 +340,6 @@ public class mainClass {
             bestSerie.add(0, bestFitness);
             //Ejecutamos Grasp
             grasp.run(stopCond);
-            
             //Obtención de resultados
             ArrayList<Double> resultsGrasp = grasp.getResults();
             
@@ -533,7 +540,7 @@ public class mainClass {
             MQKPGeneticAlgorithm ga = new MQKPGeneticAlgorithm();
             StopCondition stopCond = new StopCondition();
             MQKPEvaluator.resetNumEvaluations();
-            ga.initialise(60, instance);
+            ga.initialise(60, instance, this._crossPercent, this._mutatePercent, this._numberTournament, this._selector, this._mutate );
             stopCond.setConditions(MAX_SOLUTIONS_PER_RUN, 0, MAX_SECONS_PER_RUN);
             
             //Ejecutar el GA
@@ -553,7 +560,133 @@ public class mainClass {
                 bestGenetic.add(i, (double)bestSoFarResults.get(i));
             }            
         }
+        private void generateOptionsGAKnapsackProblem(){
+            this._dialog.setLayout(new GridLayout(0,2,1,2));
+            //Generamos los elementos del modal:
+            JLabel label = new JLabel("Número de mochilas");
+            label.setFont(new Font("Serif", Font.BOLD, 18));
+            label.setHorizontalAlignment(JLabel.CENTER);
+            label.setVerticalAlignment(JLabel.CENTER);
+            _dialog.add(label);                      
+            //Tras el titulo, insertamos un campo de texto para el número de mochilas
+            JTextField txtKnapSack = new JTextField();
+            txtKnapSack.setHorizontalAlignment(JTextField.CENTER);
+            txtKnapSack.setText("5");
+            _dialog.add(txtKnapSack);
+            
+            //Mutate Percent to GA
+            JLabel percent = new JLabel("Probabilidad de mutación: (0-1)");
+            percent.setFont(new Font("Serif", Font.BOLD, 18));
+            percent.setHorizontalAlignment(JLabel.CENTER);
+            percent.setVerticalAlignment(JLabel.CENTER);            
+            _dialog.add(percent);
+            
+            JTextField txtMutatePercent = new JTextField();
+            txtMutatePercent.setHorizontalAlignment(JTextField.CENTER);
+            txtMutatePercent.setText("0.25");
+            _dialog.add(txtMutatePercent); 
+            
+            //Cross Percent to GA
+            JLabel percentCross = new JLabel("Probabilidad de Cruce: (0-1)");
+            percentCross.setFont(new Font("Serif", Font.BOLD, 18));
+            percentCross.setHorizontalAlignment(JLabel.CENTER);
+            percentCross.setVerticalAlignment(JLabel.CENTER);
+            _dialog.add(percentCross);
+            
+            JTextField txtCrossPercent = new JTextField();
+            txtCrossPercent.setHorizontalAlignment(JTextField.CENTER);
+            txtCrossPercent.setText("0.8");
+            _dialog.add(txtCrossPercent);  
+            //List Selection
+            String[] list = {"Selección por ruleta", "Selección por torneo", "Selección por torneo KL","Selección por ranking"};            
+            JComboBox Lista = new JComboBox(list);
+            Lista.setFont(new Font("Serif", Font.BOLD, 18));
+            JLabel selectOperator = new JLabel("Operador de selección:");
+            selectOperator.setFont(new Font("Serif", Font.BOLD, 18));
+            selectOperator.setHorizontalAlignment(JLabel.CENTER);
+            selectOperator.setVerticalAlignment(JLabel.CENTER);            
+            Lista.setSelectedIndex(0);
+            _dialog.add(selectOperator);
 
+            JLabel Tournament = new JLabel("Tamaño del torneo:");
+            Tournament.setFont(new Font("Serif", Font.BOLD, 18));
+            Tournament.setHorizontalAlignment(JLabel.CENTER);
+            Tournament.setVerticalAlignment(JLabel.CENTER);
+            Tournament.setVisible(false);
+           
+            JTextField TournamentNumber = new JTextField();
+            TournamentNumber.setHorizontalAlignment(JTextField.CENTER);
+            TournamentNumber.setVisible(false);
+   
+            Lista.addActionListener((ActionEvent e) -> {
+                if(Lista.getSelectedItem().equals("Selección por torneo") ||
+                        Lista.getSelectedItem().equals("Selección por torneo KL")){
+                    Tournament.setVisible(true);
+                    TournamentNumber.setVisible(true);
+                }
+                else{
+                    Tournament.setVisible(false);
+                    TournamentNumber.setVisible(false);
+                }
+            });
+            
+            _dialog.add(Tournament); 
+            _dialog.add(Lista);
+            
+            _dialog.add(TournamentNumber); 
+
+            //List Selection
+            String[] listMutate = {"Mutación Uniforme", "Mutación de intercambios", "Mutación de inserción"};            
+            JComboBox ListaMutate = new JComboBox(listMutate);
+            ListaMutate.setFont(new Font("Serif", Font.BOLD, 18));
+            JLabel MutateOperator = new JLabel("Operador de mutación:");
+            MutateOperator.setFont(new Font("Serif", Font.BOLD, 18));
+            MutateOperator.setHorizontalAlignment(JLabel.CENTER);
+            MutateOperator.setVerticalAlignment(JLabel.CENTER);            
+            ListaMutate.setSelectedIndex(0);
+            _dialog.add(MutateOperator);
+            _dialog.add(ListaMutate);
+
+            
+            //Fill Spaces            
+            JLabel information = new JLabel();
+            information.setVisible(false);
+            _dialog.add(information);
+            //Insertamos el boton de validar los datos
+            JButton btn = new JButton("Validar");
+            btn.addActionListener(new ActionListener(){
+                boolean numeric = false;
+                //ActionPermormed, comprueba si el texto introducido es númerico
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try{
+                        Integer.parseInt(txtKnapSack.getText());
+                        Double.parseDouble(txtMutatePercent.getText());
+                        Double.parseDouble(txtCrossPercent.getText());
+                        
+			numeric = true;
+			}catch(NumberFormatException except){
+                            numeric = false;
+			}
+			if(!numeric || Double.parseDouble(txtCrossPercent.getText()) < 0. || 
+                                Double.parseDouble(txtCrossPercent.getText()) > 1.0 ||
+                                Double.parseDouble(txtMutatePercent.getText()) < 0. ||
+                                Double.parseDouble(txtMutatePercent.getText()) > 1.0)
+                            btn.setBackground(Color.red);
+			else{
+                            _numKnapSack = Integer.parseInt(txtKnapSack.getText());
+                            _mutatePercent = Double.parseDouble(txtMutatePercent.getText());
+                            _crossPercent = Double.parseDouble(txtCrossPercent.getText());
+                            _selector = Lista.getSelectedItem().toString();
+                            if(Lista.getSelectedItem().equals("Selección por Torneo"))                                
+                                _numberTournament = Integer.parseInt(TournamentNumber.getText());
+                            _mutate = ListaMutate.getSelectedItem().toString();
+                            _frame.dispose();
+			}
+		}
+            });            
+            _dialog.add(btn);            
+        }
         
 }
        

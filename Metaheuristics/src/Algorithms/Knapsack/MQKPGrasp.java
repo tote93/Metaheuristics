@@ -113,7 +113,6 @@ public class MQKPGrasp extends MQKPMetaheuristics{
 	public void initialise(double alpha, MQKPInstance instance){
             _sol = new MQKPSolution(instance);
             _bestSolution = new MQKPSolution(instance);
-            _bestSolution.copy(_sol);
             _instance = instance;
             _alpha = alpha;        
         }
@@ -128,7 +127,7 @@ public class MQKPGrasp extends MQKPMetaheuristics{
                     System.out.println("GRASP was not initialised");
                     exit(-1);
             }
-
+            
             while (!stopCondition.reached()) {
                     buildInitialSolution();
                     
@@ -142,7 +141,7 @@ public class MQKPGrasp extends MQKPMetaheuristics{
                         _results.add(auxResults.get(i));
 
                     if (MQKPEvaluator.compare(_sol.getFitness(), _bestSolution.getFitness()) > 0)
-                            _bestSolution.copy(_sol);
+                            _bestSolution = _sol;
 
                     stopCondition.notifyIteration();
             }        

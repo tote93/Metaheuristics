@@ -1,9 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Algorithms.Knapsack;
+
+import javax.swing.Timer;
 
 /**
  *
@@ -41,8 +38,8 @@ public class StopCondition {
 
 		if (_maxIterations > 0 && _numIterations >= _maxIterations)
 			result = true;
- 		if (_maxTime > 0 && ((System.currentTimeMillis()/1000 -_start)/1000F) >= _maxTime)
-			result = true;
+                if(_maxTime > 0 && (System.currentTimeMillis()-_start)/1000F >= _maxTime)
+                        result = true;
 		return result;            
         }
 	/**
@@ -55,7 +52,7 @@ public class StopCondition {
 		_maxEvaluations = maxEvaluations;
 		_maxIterations = maxIterations;
 		_maxTime = maxTime;
-                _start = System.currentTimeMillis();
+		_start = System.currentTimeMillis();
 	}
       	/**
 	 * Función que notifica al objeto condición de parada que se ha ejecutado una nueva iteración de la metaheurística

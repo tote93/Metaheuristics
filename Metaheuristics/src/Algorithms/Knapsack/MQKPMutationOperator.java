@@ -23,6 +23,7 @@ public class MQKPMutationOperator {
 	double _mutProb;
 	int _numObjs;
 	int _numKnapsakcs;
+        String _mutateOperator = "Mutación Uniforme";
 
 	/**
 	 * Función que muta una solución
@@ -43,18 +44,61 @@ public class MQKPMutationOperator {
 	 * Constructor
 	 * @param mutProb Probabilidad de mutación
 	 * @param instance Instancia del problema a abordar
+         * @param mutator
 	 */
-	public MQKPMutationOperator(double mutProb, MQKPInstance instance){
+	public MQKPMutationOperator(double mutProb, MQKPInstance instance, String mutator){
 		_mutProb = mutProb;
 		_numObjs = instance.getNumObjs();
 		_numKnapsakcs = instance.getNumKnapsacks();
+                _mutateOperator = mutator;
 	} 
 	/**
 	 * Función que muta un conjunto de soluciones
 	 * @param sols Soluciones a mutar
-	 */
+	 */   
 	public void mutate(ArrayList<Solution> sols){
-            for(int i = 0; i < sols.size(); i++)                
-                mutate(sols.get(i));
+            switch(this._mutateOperator){
+                case "Mutación Uniforme":
+                    sols.forEach((sol) -> {
+                        mutate(sol);
+                    });
+                    break;
+                case "Mutación de intercambios":
+                    sols.forEach((sol) -> {
+                        exchangeMutate(sol);
+                    });
+                    break;
+                case "Mutación de inserción":
+                    sols.forEach((sol) -> {
+                        insertionMutate(sol);
+                    });
+                    break;
+                default:
+                    sols.forEach((sol) -> {
+                        mutate(sol);
+                    });                    
+            }
 	}        
+
+    private void exchangeMutate(Solution sol) {
+            MQKPSolution s = (MQKPSolution) sol;
+            Random r = new Random();
+            for(int i = 0; i < _numObjs; i++){
+                if((double) r.nextInt()/(Integer.MAX_VALUE) <= _mutProb){
+                    int val = r.nextInt(_numKnapsakcs+1), val2 = r.nextInt(_numKnapsakcs+1);
+                    int prevKnap = s.whereIsObject(val);
+                    s.putObjectIn(val, val2);
+                    s.putObjectIn(val2, prevKnap);
+                }               
+            }       
+    }
+
+    private void insertionMutate(Solution sol) {
+            MQKPSolution s = (MQKPSolution) sol;
+            Random r = new Random();
+            for(int i = 0; i < _numObjs; i++){
+                s.putObjectIn(r.nextInt(_numObjs), r.nextInt(_numKnapsakcs + 1));          
+            }       
+    }
+    
 }

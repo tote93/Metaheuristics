@@ -46,7 +46,7 @@ public class TournamentSelector implements SelectionOperator{
     }
     /**
      * Función que selecciona una solución del conjunto mediante torneo
-     * @param[in] set Vector de soluciones
+     * @param set Vector de soluciones
      * @result Solución seleccionada
      */
     Solution selectOne(ArrayList<Solution> set) {
@@ -63,7 +63,7 @@ public class TournamentSelector implements SelectionOperator{
 
         best = set.get(randIndex);
 
-        for (int i = 0; i < _k - 1; ++i) {
+        for (int i = 0; i < _k - 1; i++) {
             randIndex = r.nextInt((int) set.size());
             if (MQKPEvaluator.compare(best.getFitness(), set.get(randIndex).getFitness()) < 0) {
                 best = set.get(randIndex);

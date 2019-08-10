@@ -52,7 +52,7 @@ public class MQKPSimulatedAnnealing extends MQKPMetaheuristics{
             */
             double prob = Math.exp(auxDeltaFitness/_T);
             
-            double randSample = ((r.nextDouble()) / Integer.MAX_VALUE);
+            double randSample = ((double)(r.nextInt())) / Integer.MAX_VALUE;
             return (randSample < prob);
         }
         

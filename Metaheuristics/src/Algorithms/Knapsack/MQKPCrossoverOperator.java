@@ -36,7 +36,7 @@ public class MQKPCrossoverOperator {
 		MQKPSolution  sol1 = (MQKPSolution ) s1;
 		MQKPSolution  sol2 = (MQKPSolution ) s2;
                 Random r = new Random();
-		double randSample = (((double) r.nextDouble()) / Integer.MAX_VALUE);
+		double randSample = (((double) r.nextInt()) / Integer.MAX_VALUE);
 
 		if (randSample < _crossProb) {
 
@@ -44,7 +44,7 @@ public class MQKPCrossoverOperator {
 			//que va eligiendo el valor de uno de los padres aleatoriamente,
 			//con la misma probabilidad, para cada gen
 			for(int i = 0; i < _numObjs; i++){
-				if((((double) r.nextDouble()) / Integer.MAX_VALUE) < 0.5){
+				if((((double) r.nextInt()) / Integer.MAX_VALUE) < 0.5){
 					sol.putObjectIn(i, sol1.whereIsObject(i));
 				}
 				else{

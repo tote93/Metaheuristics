@@ -3,8 +3,11 @@ package MainProgram;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import static java.awt.Color.ORANGE;
+import static java.awt.Color.blue;
+import static java.awt.Color.green;
+import static java.awt.Color.red;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
 import javax.swing.JFrame;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -17,12 +20,17 @@ import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.RectangleAnchor;
 import org.jfree.ui.TextAnchor;
 import java.awt.Font;
+import java.awt.Shape;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
+import java.util.Random;
 import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.renderer.xy.XYItemRenderer;
 
 public final class GenGraphic extends JFrame {
     ChartPanel chartPanel = null;
     XYSeriesCollection _dataset = null;
-    private ActionEvent event;
     String _title = "";
     public GenGraphic(XYSeriesCollection data, String title) {
         this._title = title;
@@ -38,11 +46,9 @@ public final class GenGraphic extends JFrame {
         XYDataset dataset = this._dataset;
 
         JFreeChart chart;
-        if(this._title.equals("TestingGA")){//GeneticAlgorithm
-            chart = ChartFactory.createScatterPlot(chartTitle,
-                           xAxisLabel, yAxisLabel, dataset);
+        if(this._title.equals("GeneticAlgorithm")){
+            chart = ChartFactory.createScatterPlot(chartTitle,xAxisLabel, yAxisLabel, dataset);
             ChartPanel chPanel = new ChartPanel(chart);
-            chPanel.setPreferredSize(new Dimension(785, 440));
 
             final XYPlot plot = (XYPlot) chart.getPlot();
             plot.setDomainPannable(true);
@@ -59,9 +65,7 @@ public final class GenGraphic extends JFrame {
 
             plot.setDomainMinorGridlinesVisible(true);
             plot.setRangeMinorGridlinesVisible(true);
-
-            NumberAxis domainAxis = (NumberAxis) plot.getDomainAxis();
-            //domainAxis.setAutoRangeIncludesZero(false);
+            
             for(int i = 0; i < this._dataset.getSeriesCount(); i++){
                 final Marker start = new ValueMarker(this._dataset.getSeries(i).getMaxY());  
                 if(this._dataset.getSeries(i).getDescription() != null){
@@ -73,6 +77,16 @@ public final class GenGraphic extends JFrame {
                     plot.addRangeMarker(start);                    
                 }
             }
+            //Modificación tamaño de puntos en el grafico
+            XYItemRenderer renderer = plot.getRenderer();
+            renderer.setSeriesPaint(0,Color.blue);
+            double size = 2.0;
+            double delta = 2;
+            Shape shape1 = new Rectangle2D.Double(-delta, -delta, size, size);
+            Shape shape2 = new Ellipse2D.Double(-delta, -delta, size, size);
+            renderer.setSeriesShape(0, shape1);
+            renderer.setSeriesShape(1, shape2);
+
             return chPanel;             
         }
         else{
@@ -87,7 +101,18 @@ public final class GenGraphic extends JFrame {
             plot.setDomainGridlinePaint(Color.lightGray);
             plot.setRangeGridlinesVisible(true);
             plot.setRangeGridlinePaint(Color.lightGray);
-
+            
+            NumberAxis rangeAxis = (NumberAxis)plot.getDomainAxis();
+            if(this._dataset.getSeriesCount()>2){
+                rangeAxis.setRange(0.0, 6000);
+            }
+            ArrayList<Color> colores = new ArrayList<>();
+            colores.add(new Color(250,46,2));
+            colores.add(new Color(2,179,250));
+            colores.add(new Color(3,151,84));
+            colores.add(new Color(242,193,8));
+            
+            Random rand = new Random();
             for(int i = 0; i < this._dataset.getSeriesCount(); i++){
                 final Marker start = new ValueMarker(this._dataset.getSeries(i).getMaxY());  
                 if(this._dataset.getSeries(i).getDescription() != null){
@@ -96,7 +121,8 @@ public final class GenGraphic extends JFrame {
                     Font font = new Font("TimesRoman", Font.PLAIN ,12);
                     start.setLabelFont(font);
                     start.setLabelTextAnchor(TextAnchor.TOP_RIGHT);
-                    plot.addRangeMarker(start);                    
+                    plot.addRangeMarker(start);                   
+                    plot.getRendererForDataset(plot.getDataset(0)).setSeriesPaint(i, colores.get(i));
                 }
             }
             return chPanel;            

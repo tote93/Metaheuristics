@@ -50,7 +50,7 @@ public class main_panel extends javax.swing.JFrame {
 		this.jpanelInfo.setVisible(false);
 		this.startAlgorithm.setVisible(false);
 		this.DisplayPanel.setVisible(true);
-                //jMenu3.setVisible(false);
+                jMenu3.setVisible(false);
                 
 	}
 
@@ -278,7 +278,7 @@ public class main_panel extends javax.swing.JFrame {
 
         GeneticAlgorithm.setBackground(java.awt.Color.lightGray);
         GeneticAlgorithm.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        GeneticAlgorithm.setText("Genetic Algorithm");
+        GeneticAlgorithm.setText("Algoritmo Genético");
         GeneticAlgorithm.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 GeneticAlgorithmMousePressed(evt);
@@ -341,7 +341,7 @@ public class main_panel extends javax.swing.JFrame {
 	 * @param evt
 	 */
 	private void testingButtonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_testingButtonMousePressed
-
+/*
 		mainClass mc = new mainClass("Algoritmo de la mochila", "GeneticAlgorithm");
 		XYSeriesCollection dataset = mc.initialise();
 		GenGraphic g = new GenGraphic(dataset, "GeneticAlgorithm");
@@ -350,7 +350,7 @@ public class main_panel extends javax.swing.JFrame {
 		DisplayPanel.removeAll();
 		DisplayPanel.add(chart);
 		DisplayPanel.validate();
-		DisplayPanel.repaint();
+		DisplayPanel.repaint();*/
 	}//GEN-LAST:event_testingButtonMousePressed
 
 	/**

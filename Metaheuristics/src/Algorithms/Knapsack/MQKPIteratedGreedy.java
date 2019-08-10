@@ -90,7 +90,7 @@ public class MQKPIteratedGreedy extends MQKPMetaheuristics{
             Random r = new Random();
             for (int i = 0; i < numObjs; i++){
                     
-                    double randSample = ((double)(r.nextDouble())) / Integer.MAX_VALUE;
+                    double randSample = ((double)(r.nextInt())) / Integer.MAX_VALUE;
 
                     if (randSample <= _alpha){
                             _sol.putObjectIn(i, 0);

@@ -20,9 +20,11 @@ class MQKPAssignmentOperation implements MQKPChangeOperation {
     }
 
     @Override
-    public void apply(MQKPSolution sol) {
-	sol.putObjectIn(_indexObj, _indexKnapsack);
-	sol.setFitness(sol.getFitness() + this._deltaFitness);    
+    public void apply(MQKPSolution solution) {
+	solution.putObjectIn(_indexObj, _indexKnapsack);
+	double actualFitness = solution.getFitness();
+	double newFitness = actualFitness + _deltaFitness;
+	solution.setFitness(newFitness);        
     }
  	/**
 	 * Función que devuelve el objeto sujeto de la operación
