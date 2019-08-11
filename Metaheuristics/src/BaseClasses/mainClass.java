@@ -1,6 +1,7 @@
 
 package BaseClasses;
 
+import Algorithms.Knapsack.MQKPAntColonyOpt;
 import Algorithms.Knapsack.MQKPNeighExplorer;
 import Algorithms.Knapsack.MQKPEvaluator;
 import Algorithms.Knapsack.MQKPGeneticAlgorithm;
@@ -23,6 +24,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import static java.lang.Double.max;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -213,7 +215,23 @@ public class mainClass {
                                 this.runAGExperiment(results, ga, currentGenetic, bestGenetic);
                                 dataset.addSeries(currentGenetic); 
                                 dataset.addSeries(bestGenetic); 
-                            break;                             
+                            break; 
+                       case "AntColony":
+				//generateOptionsGAKnapsackProblem();
+				//generateDialog(300, 550,"Parámetros Knapsack");
+				MQKPInstance antC = new MQKPInstance();
+				try {
+					antC.readInstance("/Algorithms/Knapsack/exampleKnapsack.txt", 5);
+				} catch (IOException ex) {
+					Logger.getLogger(mainClass.class.getName()).log(Level.SEVERE, null, ex);
+				}				                                
+                                XYSeries currenACO = new XYSeries("CurrentACO");
+                                XYSeries bestACO = new XYSeries("bestACO");
+                                bestACO.setDescription("bestACO");
+                                this.runACOExperiment(results, antC, currenACO, bestACO);
+                                dataset.addSeries(currenACO); 
+                                dataset.addSeries(bestACO);
+                                break;
 			default:
 				System.out.println("DEFAULT ENTRY");
 				break;
@@ -272,14 +290,14 @@ public class mainClass {
 		_dialog.setVisible(true);
 	}
 
-	/**
+        /**
 	 * Funcion que ejecuta el algoritmo de Escalada
 	 * @param results Vector de resultados de fitness
 	 * @param instance Instancia del problema
 	 * @param exp Objeto que explorará el vecindario de soluciones
          * @param serie Serie de elementos para mostrar por pantalla
 	 */
-	public void runALSExperiment(ArrayList results, MQKPInstance instance, MQKPNeighExplorer exp, XYSeries serie) {
+       public void runALSExperiment(ArrayList results, MQKPInstance instance, MQKPNeighExplorer exp, XYSeries serie) {
                 
 		MQKPLocalSearch ls = new MQKPLocalSearch();
 
@@ -321,7 +339,7 @@ public class mainClass {
 			serie.add(i+1, (double) results.get(i));                
                 //System.out.println("Total de iteraciones: "+numInitialSolutions+" y evaluator: "+MQKPEvaluator.getNumEvaluations());
 	}                
-        public void runAGraspExperiment(ArrayList results, MQKPInstance instance, XYSeries serie, XYSeries bestSerie){
+       public void runAGraspExperiment(ArrayList results, MQKPInstance instance, XYSeries serie, XYSeries bestSerie){
             MQKPSolution initialSolution = new MQKPSolution(instance);
             MQKPGrasp grasp = new MQKPGrasp();
             StopCondition stopCond = new StopCondition();
@@ -349,7 +367,7 @@ public class mainClass {
                 bestSerie.add(i+1,Math.max(bestSerie.getMaxY(), (double) resultsGrasp.get(i)));                
             }
         }
-        public void runIGreedyExperiment(ArrayList results, MQKPInstance instance, XYSeries serie, XYSeries bestSerie){
+       public void runIGreedyExperiment(ArrayList results, MQKPInstance instance, XYSeries serie, XYSeries bestSerie){
             MQKPSolution initialSolution = new MQKPSolution(instance);
             MQKPIteratedGreedy ig = new MQKPIteratedGreedy();
             StopCondition stopCond = new StopCondition();
@@ -378,7 +396,7 @@ public class mainClass {
                 bestSerie.add(i+1,Math.max(bestSerie.getMaxY(), (double) resultsIG.get(i)));                
             }
         }        
-        public void runSAExperiment(ArrayList results, MQKPInstance instance, XYSeries serie){
+       public void runSAExperiment(ArrayList results, MQKPInstance instance, XYSeries serie){
             MQKPSolution initialSolution = new MQKPSolution(instance);
             MQKPSimulatedAnnealing SA = new MQKPSimulatedAnnealing();
             StopCondition stopCond = new StopCondition();
@@ -405,8 +423,7 @@ public class mainClass {
                 serie.add(i+1, (double) resultsSA.get(i));                              
             }
         }            
-
-        public void runTSExperiment(ArrayList results, MQKPInstance instance, XYSeries serie){
+       public void runTSExperiment(ArrayList results, MQKPInstance instance, XYSeries serie){
             MQKPSolution initialSolution = new MQKPSolution(instance);
             MQKPTabuSearch TS = new MQKPTabuSearch();
             StopCondition stopCond = new StopCondition();
@@ -433,7 +450,7 @@ public class mainClass {
                 serie.add(i+1, (double) resultsTS.get(i));                              
             }
         }
-        public void runAllTrayectoriesExperiment(ArrayList results, MQKPInstance instance, XYSeries AllTabuSearch, XYSeries AllGrasp, XYSeries AllSimAnn ,XYSeries AllIteratedGreedy){
+       public void runAllTrayectoriesExperiment(ArrayList results, MQKPInstance instance, XYSeries AllTabuSearch, XYSeries AllGrasp, XYSeries AllSimAnn ,XYSeries AllIteratedGreedy){
             MQKPSolution initialSolution = new MQKPSolution(instance);
             MQKPTabuSearch TS = new MQKPTabuSearch();
             StopCondition stopCond = new StopCondition();
@@ -535,7 +552,7 @@ public class mainClass {
             for(int i = 0; i < resultsGrasp.size(); i++)
                 AllGrasp.add(i+1, (double) resultsGrasp.get(i));              
         }
-        public void runAGExperiment(ArrayList results, MQKPInstance instance,XYSeries serieGenetic, XYSeries bestGenetic){
+       public void runAGExperiment(ArrayList results, MQKPInstance instance,XYSeries serieGenetic, XYSeries bestGenetic){
 	//Inicialización
             MQKPGeneticAlgorithm ga = new MQKPGeneticAlgorithm();
             StopCondition stopCond = new StopCondition();
@@ -560,7 +577,7 @@ public class mainClass {
                 bestGenetic.add(i, (double)bestSoFarResults.get(i));
             }            
         }
-        private void generateOptionsGAKnapsackProblem(){
+       private void generateOptionsGAKnapsackProblem(){
             this._dialog.setLayout(new GridLayout(0,2,1,2));
             //Generamos los elementos del modal:
             JLabel label = new JLabel("Número de mochilas");
@@ -687,7 +704,26 @@ public class mainClass {
             });            
             _dialog.add(btn);            
         }
-        
+       void runACOExperiment(ArrayList results,MQKPInstance instance,XYSeries currenACO, XYSeries bestACO){
+	//Inicialización
+            MQKPAntColonyOpt aco = new MQKPAntColonyOpt();
+            StopCondition stopCond = new StopCondition();
+            MQKPEvaluator.resetNumEvaluations();
+            aco.initialise(5, 0.1, 1, 0.5, 0.1, 0.5, 20, instance);
+            stopCond.setConditions(MAX_SOLUTIONS_PER_RUN, 0, MAX_SECONS_PER_RUN);
+
+            //Ejecutar el ACO
+            aco.run(stopCond);
+
+            //Almacenar los resultados
+            ArrayList<Double> resultsACO = aco.getResults();
+
+            ArrayList<Double> bestSoFarResults = aco.getBestPerIteration();
+            for(int i = 0; i < bestSoFarResults.size(); i++)
+                bestACO.add(i, bestSoFarResults.get(i));            
+            for (int i = 0; i < resultsACO.size();i++)
+                currenACO.add(i, resultsACO.get(i));           
+       }
 }
        
 

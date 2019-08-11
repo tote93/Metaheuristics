@@ -198,7 +198,6 @@
             <MenuItem class="javax.swing.JMenuItem" name="testingButton">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Testing"/>
-                <Property name="enabled" type="boolean" value="false"/>
                 <Property name="requestFocusEnabled" type="boolean" value="false"/>
               </Properties>
               <Events>

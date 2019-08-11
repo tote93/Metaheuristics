@@ -3,10 +3,6 @@ package MainProgram;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import static java.awt.Color.ORANGE;
-import static java.awt.Color.blue;
-import static java.awt.Color.green;
-import static java.awt.Color.red;
 import java.awt.Dimension;
 import javax.swing.JFrame;
 import org.jfree.chart.ChartFactory;
@@ -106,13 +102,17 @@ public final class GenGraphic extends JFrame {
             if(this._dataset.getSeriesCount()>2){
                 rangeAxis.setRange(0.0, 6000);
             }
+            else{
+                if(this._dataset.getSeries(1).getDescription().equals("bestACO")){
+                    rangeAxis.setRange(0.0, 10000);
+                }
+            }
             ArrayList<Color> colores = new ArrayList<>();
             colores.add(new Color(250,46,2));
             colores.add(new Color(2,179,250));
             colores.add(new Color(3,151,84));
             colores.add(new Color(242,193,8));
             
-            Random rand = new Random();
             for(int i = 0; i < this._dataset.getSeriesCount(); i++){
                 final Marker start = new ValueMarker(this._dataset.getSeries(i).getMaxY());  
                 if(this._dataset.getSeries(i).getDescription() != null){

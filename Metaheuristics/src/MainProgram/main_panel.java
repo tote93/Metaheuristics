@@ -50,7 +50,7 @@ public class main_panel extends javax.swing.JFrame {
 		this.jpanelInfo.setVisible(false);
 		this.startAlgorithm.setVisible(false);
 		this.DisplayPanel.setVisible(true);
-                jMenu3.setVisible(false);
+               // jMenu3.setVisible(false);
                 
 	}
 
@@ -295,7 +295,6 @@ public class main_panel extends javax.swing.JFrame {
         jMenu3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
         testingButton.setText("Testing");
-        testingButton.setEnabled(false);
         testingButton.setRequestFocusEnabled(false);
         testingButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
@@ -341,16 +340,16 @@ public class main_panel extends javax.swing.JFrame {
 	 * @param evt
 	 */
 	private void testingButtonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_testingButtonMousePressed
-/*
-		mainClass mc = new mainClass("Algoritmo de la mochila", "GeneticAlgorithm");
+
+		mainClass mc = new mainClass("Algoritmo de la mochila", "AntColony");
 		XYSeriesCollection dataset = mc.initialise();
-		GenGraphic g = new GenGraphic(dataset, "GeneticAlgorithm");
+		GenGraphic g = new GenGraphic(dataset, "AntColony");
 		ChartPanel chart = g.createChartPanel();
 		chart.setSize(new Dimension(DisplayPanel.getWidth(), DisplayPanel.getHeight()));
 		DisplayPanel.removeAll();
 		DisplayPanel.add(chart);
 		DisplayPanel.validate();
-		DisplayPanel.repaint();*/
+		DisplayPanel.repaint();
 	}//GEN-LAST:event_testingButtonMousePressed
 
 	/**
