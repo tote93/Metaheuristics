@@ -324,18 +324,14 @@ public class MQKPGeneticAlgorithm extends MQKPMetaheuristics{
                     switch(this.selectorSelected){
                         case "Selección por torneo":
                              _selector = new TournamentSelector(this._numberTournament); 
-                             System.out.println("Torneo");
                              break;
                         case "Selección por ruleta":
                             _selector = new RouletteSelector();
-                            System.out.println("Ruleta");
                     	break;
                         case "Selección por torneo KL":
-                            System.out.println("KL");
                             _selector = new TournamentKLSelector(this._numberTournament);
                             break;
                         case "Selección por ranking":
-                            System.out.println("rank");
                             _selector = new RankingSelector();
                             break;                            
                         default:

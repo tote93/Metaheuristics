@@ -85,6 +85,8 @@ public class main_panel extends javax.swing.JFrame {
         AllMH = new javax.swing.JMenuItem();
         jMenu5 = new javax.swing.JMenu();
         GeneticAlgorithm = new javax.swing.JMenuItem();
+        jMenu6 = new javax.swing.JMenu();
+        AntColonyOptimization = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         testingButton = new javax.swing.JMenuItem();
         JMenuOut = new javax.swing.JMenu();
@@ -287,6 +289,22 @@ public class main_panel extends javax.swing.JFrame {
         jMenu5.add(GeneticAlgorithm);
 
         jMenu2.add(jMenu5);
+
+        jMenu6.setBackground(java.awt.Color.lightGray);
+        jMenu6.setText("Colonia de Hormigas");
+        jMenu6.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+
+        AntColonyOptimization.setBackground(java.awt.Color.lightGray);
+        AntColonyOptimization.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        AntColonyOptimization.setText("Optimización por colonias");
+        AntColonyOptimization.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                AntColonyOptimizationMousePressed(evt);
+            }
+        });
+        jMenu6.add(AntColonyOptimization);
+
+        jMenu2.add(jMenu6);
 
         jMenuBar1.add(jMenu2);
 
@@ -499,6 +517,15 @@ public class main_panel extends javax.swing.JFrame {
         startAlgorithm.setVisible(false);        
     }//GEN-LAST:event_GeneticAlgorithmMousePressed
 
+    private void AntColonyOptimizationMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_AntColonyOptimizationMousePressed
+        // TODO add your handling code here:
+        listAlgorithms.clearSelection();        
+        labelTitle.setText("Colonias de Hormigas");
+        _heuristicSelected = "AntColony";
+	jpanelList.setVisible(true);
+        startAlgorithm.setVisible(false);                   
+    }//GEN-LAST:event_AntColonyOptimizationMousePressed
+
 
 
 	/**
@@ -577,6 +604,7 @@ public class main_panel extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem AllMH;
+    private javax.swing.JMenuItem AntColonyOptimization;
     private javax.swing.JPanel DisplayPanel;
     private javax.swing.JMenuItem GeneticAlgorithm;
     private javax.swing.JMenuItem Grasp;
@@ -592,6 +620,7 @@ public class main_panel extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
+    private javax.swing.JMenu jMenu6;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jpanelInfo;

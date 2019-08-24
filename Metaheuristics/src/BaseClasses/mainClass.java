@@ -24,7 +24,6 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import static java.lang.Double.max;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -710,7 +709,7 @@ public class mainClass {
             StopCondition stopCond = new StopCondition();
             MQKPEvaluator.resetNumEvaluations();
             aco.initialise(5, 0.1, 1, 0.5, 0.1, 0.5, 20, instance);
-            stopCond.setConditions(MAX_SOLUTIONS_PER_RUN, 0, MAX_SECONS_PER_RUN);
+            stopCond.setConditions(MAX_SOLUTIONS_PER_RUN, 0, 5);
 
             //Ejecutar el ACO
             aco.run(stopCond);

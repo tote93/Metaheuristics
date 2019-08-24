@@ -20,7 +20,6 @@ import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
-import java.util.Random;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 
@@ -104,7 +103,7 @@ public final class GenGraphic extends JFrame {
             }
             else{
                 if(this._dataset.getSeries(1).getDescription().equals("bestACO")){
-                    rangeAxis.setRange(0.0, 10000);
+                    rangeAxis.setRange(0.0, 1500);
                 }
             }
             ArrayList<Color> colores = new ArrayList<>();

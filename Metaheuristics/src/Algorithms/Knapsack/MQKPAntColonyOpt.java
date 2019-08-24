@@ -76,7 +76,7 @@ public class MQKPAntColonyOpt extends MQKPMetaheuristics{
 
             //Para cada objeto que aún no está en ninguna mochila
             
-            for (int indexObj = 0; indexObj < _objectsLeft.size(); indexObj++) {
+            for (int indexObj : _objectsLeft) {
 
                 //Para cada posible mochila y sin superar el número de intentos
                 for (int j = 1; j <= numKnapsacks && numTries < _candidateListSize;j++) {
@@ -102,7 +102,7 @@ public class MQKPAntColonyOpt extends MQKPMetaheuristics{
                      */
                     MQKPAssignmentOperation al = new MQKPAssignmentOperation();
                     double density = deltaFitness / instance.getWeight(indexObj);
-                    double significance = pow(density, beta) * pow((phMatrix.get(indexObj)).get(j), alpha);
+                    double significance = pow(density, beta) * pow(((phMatrix.get(indexObj)).get(j)), alpha);
                     al.setValues(indexObj, j, deltaFitness);
                     significances.add(significance);
                     alternatives.add(al);
@@ -171,7 +171,6 @@ public class MQKPAntColonyOpt extends MQKPMetaheuristics{
          * @param colony Puntero a la colonia a la que pertenece la hormiga
          */
         public MQKPAnt(int candidateListSize, MQKPAntColonyOpt colony) {
-            this._sol = null;
             _colony = colony;
             _sol = new MQKPSolution((colony._instance));
             _candidateListSize = candidateListSize;
@@ -287,7 +286,7 @@ public class MQKPAntColonyOpt extends MQKPMetaheuristics{
 	private void localUpdate(MQKPAssignmentOperation op) {
             double oldPh = _phMatrix.get(op.getObj()).get(op.getKnapsack());
             double newPh = (1 - _evaporation)*oldPh + _evaporation*_initTau;
-            _phMatrix.get(op.getObj()).set(op.getKnapsack(), newPh);		
+            _phMatrix.get(op.getObj()).set(op.getKnapsack(), newPh);	            
 	} 
 
 	/**
@@ -318,7 +317,7 @@ public class MQKPAntColonyOpt extends MQKPMetaheuristics{
                         double oldFit = ant.getSolution().getFitness();
                         ant.chooseOperation(op);
                         double newFit = ant.getSolution().getFitness();
-                        
+                        //System.out.println("Antiguo fitness: "+oldFit+" nuevo fitnes: "+newFit);
                         //Si la hormiga se ha movido, entonces aplicar la actualización local de feromona. Si no, apuntarla en stoppedAnts para eliminarla después de movingAnts
                         if (oldFit != newFit) {
                             localUpdate(op);
@@ -326,9 +325,9 @@ public class MQKPAntColonyOpt extends MQKPMetaheuristics{
                             stoppedAnts.add(iAnt);
                         }
                     });
-			for (int iAnt = 0; iAnt < stoppedAnts.size(); iAnt++) {
-				movingAnts.remove(movingAnts.size()-1);
-			}  
+                    for (Integer iAnt : stoppedAnts) {
+                        movingAnts.remove(iAnt);  
+                    }
 		}
                
 		//Actualizar la mejor Solución
@@ -339,7 +338,7 @@ public class MQKPAntColonyOpt extends MQKPMetaheuristics{
 			double currentFitness = ant.getSolution().getFitness();
 
 			if (MQKPEvaluator.compare(currentFitness, bestFitness) > 0) {
-				_bestSolution = sol;
+				_bestSolution.copy(sol);
 				bestFitness = currentFitness;
 			}
 		}

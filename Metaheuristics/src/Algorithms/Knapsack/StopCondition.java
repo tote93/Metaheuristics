@@ -1,7 +1,5 @@
 package Algorithms.Knapsack;
 
-import javax.swing.Timer;
-
 /**
  *
  * @author i62gorej
