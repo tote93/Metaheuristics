@@ -216,11 +216,11 @@ public class mainClass {
                                 dataset.addSeries(bestGenetic); 
                             break; 
                        case "AntColony":
-				//generateOptionsGAKnapsackProblem();
-				//generateDialog(300, 550,"Parámetros Knapsack");
+				generateOptionsACOKnapsackProblem();
+                                generateDialog(200, 400,"Parámetros Knapsack");
 				MQKPInstance antC = new MQKPInstance();
 				try {
-					antC.readInstance("/Algorithms/Knapsack/exampleKnapsack.txt", 5);
+					antC.readInstance("/Algorithms/Knapsack/exampleKnapsack.txt", this._numKnapSack);
 				} catch (IOException ex) {
 					Logger.getLogger(mainClass.class.getName()).log(Level.SEVERE, null, ex);
 				}				                                
@@ -289,14 +289,14 @@ public class mainClass {
 		_dialog.setVisible(true);
 	}
 
-        /**
+      /**
 	 * Funcion que ejecuta el algoritmo de Escalada
 	 * @param results Vector de resultados de fitness
 	 * @param instance Instancia del problema
 	 * @param exp Objeto que explorará el vecindario de soluciones
          * @param serie Serie de elementos para mostrar por pantalla
 	 */
-       public void runALSExperiment(ArrayList results, MQKPInstance instance, MQKPNeighExplorer exp, XYSeries serie) {
+      public void runALSExperiment(ArrayList results, MQKPInstance instance, MQKPNeighExplorer exp, XYSeries serie) {
                 
 		MQKPLocalSearch ls = new MQKPLocalSearch();
 
@@ -336,9 +336,8 @@ public class mainClass {
 		}
 		for (int i = 0; i < results.size(); i++)
 			serie.add(i+1, (double) results.get(i));                
-                //System.out.println("Total de iteraciones: "+numInitialSolutions+" y evaluator: "+MQKPEvaluator.getNumEvaluations());
 	}                
-       public void runAGraspExperiment(ArrayList results, MQKPInstance instance, XYSeries serie, XYSeries bestSerie){
+      public void runAGraspExperiment(ArrayList results, MQKPInstance instance, XYSeries serie, XYSeries bestSerie){
             MQKPSolution initialSolution = new MQKPSolution(instance);
             MQKPGrasp grasp = new MQKPGrasp();
             StopCondition stopCond = new StopCondition();
@@ -366,7 +365,7 @@ public class mainClass {
                 bestSerie.add(i+1,Math.max(bestSerie.getMaxY(), (double) resultsGrasp.get(i)));                
             }
         }
-       public void runIGreedyExperiment(ArrayList results, MQKPInstance instance, XYSeries serie, XYSeries bestSerie){
+      public void runIGreedyExperiment(ArrayList results, MQKPInstance instance, XYSeries serie, XYSeries bestSerie){
             MQKPSolution initialSolution = new MQKPSolution(instance);
             MQKPIteratedGreedy ig = new MQKPIteratedGreedy();
             StopCondition stopCond = new StopCondition();
@@ -395,7 +394,7 @@ public class mainClass {
                 bestSerie.add(i+1,Math.max(bestSerie.getMaxY(), (double) resultsIG.get(i)));                
             }
         }        
-       public void runSAExperiment(ArrayList results, MQKPInstance instance, XYSeries serie){
+      public void runSAExperiment(ArrayList results, MQKPInstance instance, XYSeries serie){
             MQKPSolution initialSolution = new MQKPSolution(instance);
             MQKPSimulatedAnnealing SA = new MQKPSimulatedAnnealing();
             StopCondition stopCond = new StopCondition();
@@ -422,7 +421,7 @@ public class mainClass {
                 serie.add(i+1, (double) resultsSA.get(i));                              
             }
         }            
-       public void runTSExperiment(ArrayList results, MQKPInstance instance, XYSeries serie){
+      public void runTSExperiment(ArrayList results, MQKPInstance instance, XYSeries serie){
             MQKPSolution initialSolution = new MQKPSolution(instance);
             MQKPTabuSearch TS = new MQKPTabuSearch();
             StopCondition stopCond = new StopCondition();
@@ -449,7 +448,7 @@ public class mainClass {
                 serie.add(i+1, (double) resultsTS.get(i));                              
             }
         }
-       public void runAllTrayectoriesExperiment(ArrayList results, MQKPInstance instance, XYSeries AllTabuSearch, XYSeries AllGrasp, XYSeries AllSimAnn ,XYSeries AllIteratedGreedy){
+      public void runAllTrayectoriesExperiment(ArrayList results, MQKPInstance instance, XYSeries AllTabuSearch, XYSeries AllGrasp, XYSeries AllSimAnn ,XYSeries AllIteratedGreedy){
             MQKPSolution initialSolution = new MQKPSolution(instance);
             MQKPTabuSearch TS = new MQKPTabuSearch();
             StopCondition stopCond = new StopCondition();
@@ -551,7 +550,7 @@ public class mainClass {
             for(int i = 0; i < resultsGrasp.size(); i++)
                 AllGrasp.add(i+1, (double) resultsGrasp.get(i));              
         }
-       public void runAGExperiment(ArrayList results, MQKPInstance instance,XYSeries serieGenetic, XYSeries bestGenetic){
+      public void runAGExperiment(ArrayList results, MQKPInstance instance,XYSeries serieGenetic, XYSeries bestGenetic){
 	//Inicialización
             MQKPGeneticAlgorithm ga = new MQKPGeneticAlgorithm();
             StopCondition stopCond = new StopCondition();
@@ -576,7 +575,30 @@ public class mainClass {
                 bestGenetic.add(i, (double)bestSoFarResults.get(i));
             }            
         }
-       private void generateOptionsGAKnapsackProblem(){
+       
+      void runACOExperiment(ArrayList results,MQKPInstance instance,XYSeries currenACO, XYSeries bestACO){
+	//Inicialización
+            MQKPAntColonyOpt aco = new MQKPAntColonyOpt();
+            StopCondition stopCond = new StopCondition();
+            MQKPEvaluator.resetNumEvaluations();
+            aco.initialise(5, 0.1, 1, 0.5, 0.1, 0.5, 20, instance);
+            stopCond.setConditions(MAX_SOLUTIONS_PER_RUN, 0, MAX_SECONS_PER_RUN);
+
+            //Ejecutar el ACO
+            aco.run(stopCond);
+
+            //Almacenar los resultados
+            ArrayList<Double> resultsACO = aco.getResults();
+
+            ArrayList<Double> bestSoFarResults = aco.getBestPerIteration();
+            for(int i = 0; i < bestSoFarResults.size(); i++)
+                bestACO.add(i, bestSoFarResults.get(i));            
+            for (int i = 0; i < resultsACO.size();i++)
+                currenACO.add(i, resultsACO.get(i));           
+       }
+       
+       
+      private void generateOptionsGAKnapsackProblem(){
             this._dialog.setLayout(new GridLayout(0,2,1,2));
             //Generamos los elementos del modal:
             JLabel label = new JLabel("Número de mochilas");
@@ -703,26 +725,77 @@ public class mainClass {
             });            
             _dialog.add(btn);            
         }
-       void runACOExperiment(ArrayList results,MQKPInstance instance,XYSeries currenACO, XYSeries bestACO){
-	//Inicialización
-            MQKPAntColonyOpt aco = new MQKPAntColonyOpt();
-            StopCondition stopCond = new StopCondition();
-            MQKPEvaluator.resetNumEvaluations();
-            aco.initialise(5, 0.1, 1, 0.5, 0.1, 0.5, 20, instance);
-            stopCond.setConditions(MAX_SOLUTIONS_PER_RUN, 0, 5);
 
-            //Ejecutar el ACO
-            aco.run(stopCond);
-
-            //Almacenar los resultados
-            ArrayList<Double> resultsACO = aco.getResults();
-
-            ArrayList<Double> bestSoFarResults = aco.getBestPerIteration();
-            for(int i = 0; i < bestSoFarResults.size(); i++)
-                bestACO.add(i, bestSoFarResults.get(i));            
-            for (int i = 0; i < resultsACO.size();i++)
-                currenACO.add(i, resultsACO.get(i));           
-       }
+      private void generateOptionsACOKnapsackProblem(){
+            this._dialog.setLayout(new GridLayout(0,2,1,2));
+            //Generamos los elementos del modal:
+            JLabel label = new JLabel("Número de mochilas");
+            label.setFont(new Font("Serif", Font.BOLD, 18));
+            label.setHorizontalAlignment(JLabel.CENTER);
+            label.setVerticalAlignment(JLabel.CENTER);
+            _dialog.add(label);                      
+            //Tras el titulo, insertamos un campo de texto para el número de mochilas
+            JTextField txtKnapSack = new JTextField();
+            txtKnapSack.setHorizontalAlignment(JTextField.CENTER);
+            txtKnapSack.setText("5");
+            _dialog.add(txtKnapSack);
+            
+            //Numero hormigas de la colonia
+            JLabel numAnts = new JLabel("Número de hormigas");
+            numAnts.setFont(new Font("Serif", Font.BOLD, 18));
+            numAnts.setHorizontalAlignment(JLabel.CENTER);
+            numAnts.setVerticalAlignment(JLabel.CENTER);            
+            _dialog.add(numAnts);
+            
+            JTextField txtNumAnts = new JTextField();
+            txtNumAnts.setHorizontalAlignment(JTextField.CENTER);
+            txtNumAnts.setText("5");
+            _dialog.add(txtNumAnts); 
+            
+            //Numero alternativas a evaluar por las hormigas
+            JLabel alternatives = new JLabel("Número de alternativas");
+            alternatives.setFont(new Font("Serif", Font.BOLD, 18));
+            alternatives.setHorizontalAlignment(JLabel.CENTER);
+            alternatives.setVerticalAlignment(JLabel.CENTER);
+            _dialog.add(alternatives);
+            
+            JTextField txtAlt = new JTextField();
+            txtAlt.setHorizontalAlignment(JTextField.CENTER);
+            txtAlt.setText("20");
+            _dialog.add(txtAlt);  
+            
+            //Fill Spaces            
+            JLabel information = new JLabel();
+            information.setVisible(false);
+            _dialog.add(information);
+            //Insertamos el boton de validar los datos
+            JButton btn = new JButton("Validar");
+            btn.addActionListener(new ActionListener(){
+                boolean numeric = false;
+                //ActionPermormed, comprueba si el texto introducido es númerico
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try{
+                        Integer.parseInt(txtKnapSack.getText());
+                        Integer.parseInt(txtNumAnts.getText());
+                        Integer.parseInt(txtAlt.getText());                        
+			numeric = true;
+			}catch(NumberFormatException except){
+                            numeric = false;
+			}
+			if(!numeric || Integer.parseInt(txtNumAnts.getText()) <= 0. || 
+                                Integer.parseInt(txtAlt.getText()) <= 0.)
+                            btn.setBackground(Color.red);
+			else{
+                            _numKnapSack = Integer.parseInt(txtKnapSack.getText());
+                            _mutatePercent = Double.parseDouble(txtAlt.getText());
+                            _crossPercent = Double.parseDouble(txtNumAnts.getText());
+                            _frame.dispose();
+			}
+		}
+            });            
+            _dialog.add(btn);            
+        }       
 }
        
 

@@ -46,12 +46,10 @@ public class main_panel extends javax.swing.JFrame {
 		this.setSize(sc);
 		this.jpanelList.setVisible(false);
 		this.InitialCheck();
-		this.txtInfo.setVisible(false);
+
 		this.jpanelInfo.setVisible(false);
 		this.startAlgorithm.setVisible(false);
-		this.DisplayPanel.setVisible(true);
-               // jMenu3.setVisible(false);
-                
+		this.DisplayPanel.setVisible(true);                
 	}
 
 	/**
@@ -77,15 +75,15 @@ public class main_panel extends javax.swing.JFrame {
         exportGraphic = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         LocalSearch = new javax.swing.JMenuItem();
-        jMenu4 = new javax.swing.JMenu();
+        Trayectories = new javax.swing.JMenu();
         Grasp = new javax.swing.JMenuItem();
         IterativeGreedy = new javax.swing.JMenuItem();
         SimAnn = new javax.swing.JMenuItem();
         TabuSearch = new javax.swing.JMenuItem();
         AllMH = new javax.swing.JMenuItem();
-        jMenu5 = new javax.swing.JMenu();
+        Population = new javax.swing.JMenu();
         GeneticAlgorithm = new javax.swing.JMenuItem();
-        jMenu6 = new javax.swing.JMenu();
+        AntColony = new javax.swing.JMenu();
         AntColonyOptimization = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         testingButton = new javax.swing.JMenuItem();
@@ -218,9 +216,9 @@ public class main_panel extends javax.swing.JFrame {
         });
         jMenu2.add(LocalSearch);
 
-        jMenu4.setBackground(java.awt.Color.lightGray);
-        jMenu4.setText("Trayectorias");
-        jMenu4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        Trayectories.setBackground(java.awt.Color.lightGray);
+        Trayectories.setText("Trayectorias");
+        Trayectories.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
         Grasp.setBackground(java.awt.Color.lightGray);
         Grasp.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -230,7 +228,7 @@ public class main_panel extends javax.swing.JFrame {
                 GraspMousePressed(evt);
             }
         });
-        jMenu4.add(Grasp);
+        Trayectories.add(Grasp);
 
         IterativeGreedy.setBackground(java.awt.Color.lightGray);
         IterativeGreedy.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -240,7 +238,7 @@ public class main_panel extends javax.swing.JFrame {
                 IterativeGreedyMousePressed(evt);
             }
         });
-        jMenu4.add(IterativeGreedy);
+        Trayectories.add(IterativeGreedy);
 
         SimAnn.setBackground(java.awt.Color.lightGray);
         SimAnn.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -250,7 +248,7 @@ public class main_panel extends javax.swing.JFrame {
                 SimAnnMousePressed(evt);
             }
         });
-        jMenu4.add(SimAnn);
+        Trayectories.add(SimAnn);
 
         TabuSearch.setBackground(java.awt.Color.lightGray);
         TabuSearch.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -260,7 +258,7 @@ public class main_panel extends javax.swing.JFrame {
                 TabuSearchMousePressed(evt);
             }
         });
-        jMenu4.add(TabuSearch);
+        Trayectories.add(TabuSearch);
 
         AllMH.setBackground(java.awt.Color.lightGray);
         AllMH.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -270,13 +268,13 @@ public class main_panel extends javax.swing.JFrame {
                 AllMHMousePressed(evt);
             }
         });
-        jMenu4.add(AllMH);
+        Trayectories.add(AllMH);
 
-        jMenu2.add(jMenu4);
+        jMenu2.add(Trayectories);
 
-        jMenu5.setBackground(java.awt.Color.lightGray);
-        jMenu5.setText("Poblacionales");
-        jMenu5.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        Population.setBackground(java.awt.Color.lightGray);
+        Population.setText("Poblacionales");
+        Population.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
         GeneticAlgorithm.setBackground(java.awt.Color.lightGray);
         GeneticAlgorithm.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -286,13 +284,13 @@ public class main_panel extends javax.swing.JFrame {
                 GeneticAlgorithmMousePressed(evt);
             }
         });
-        jMenu5.add(GeneticAlgorithm);
+        Population.add(GeneticAlgorithm);
 
-        jMenu2.add(jMenu5);
+        jMenu2.add(Population);
 
-        jMenu6.setBackground(java.awt.Color.lightGray);
-        jMenu6.setText("Colonia de Hormigas");
-        jMenu6.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        AntColony.setBackground(java.awt.Color.lightGray);
+        AntColony.setText("Colonia de Hormigas");
+        AntColony.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
         AntColonyOptimization.setBackground(java.awt.Color.lightGray);
         AntColonyOptimization.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -302,9 +300,9 @@ public class main_panel extends javax.swing.JFrame {
                 AntColonyOptimizationMousePressed(evt);
             }
         });
-        jMenu6.add(AntColonyOptimization);
+        AntColony.add(AntColonyOptimization);
 
-        jMenu2.add(jMenu6);
+        jMenu2.add(AntColony);
 
         jMenuBar1.add(jMenu2);
 
@@ -378,9 +376,13 @@ public class main_panel extends javax.swing.JFrame {
 		
 		labelTitle.setText("Búsqueda Local");
 		_heuristicSelected = "LocalSearch";
+                
 		jpanelList.setVisible(true);
                 listAlgorithms.clearSelection();
-                txtInfo.setText("La busqueda local blabla");
+                this.jpanelInfo.setVisible(true);
+                txtInfo.setText("Es un algoritmo iterativo que comienza con una solución arbitraria a un problema. \n\n"
+                                + "Luego intenta encontrar una mejor solución variando un único elemento de la solución.\n\nSi el cambio produce una mejor solución, nos moveremos a dicha solución, repitiendo este proceso hasta que no se puedan encontrar mejoras. Suele llamarse a esta búsqueda algoritmo voraz local, porque toma un estado vecino \"bueno\" sin pensar en la próxima acción.\n" +
+                                "\nEl Algoritmo Hill climbing es interesante para encontrar un óptimo local pero no garantiza encontrar la mejor solución posible (el óptimo global) de todas las posibles soluciones (el espacio de búsqueda).");
                 startAlgorithm.setVisible(false);
 	}//GEN-LAST:event_LocalSearchMousePressed
 
@@ -450,8 +452,8 @@ public class main_panel extends javax.swing.JFrame {
 		jpanelList.setVisible(true);
                 listAlgorithms.clearSelection();                
                 this.txtInfo.setVisible(true);
-		this.jpanelInfo.setVisible(true);
 		this.txtInfo.setText("");
+                this.jpanelInfo.setVisible(true);
 		this.txtInfo.append("GRASP es un procedimiento iterativo donde cada paso consiste en una fase de construcción y una de mejora.\n\n"
                     + "En la fase de construcción se construye iterativamente una solución factible, añadiendo un elemento en cada paso. En cada iteración la elección del próximo elemento para ser añadido a la solución parcial viene determinado por una función greedy. Esta función mide el beneficio de añadir cada uno de los elementos y se elige la mejor."
                     + "Se ha de saber que esta MH no tiene en cuenta qué ocurrirá en iteraciones sucesivas una vez que se hace una elección, sino únicamente en la iteración actual");
@@ -467,10 +469,9 @@ public class main_panel extends javax.swing.JFrame {
                 this.txtInfo.setVisible(true);
 		this.jpanelInfo.setVisible(true);
 		this.txtInfo.setText("");
-		this.txtInfo.append("Es un algoritmo de búsqueda meta-heurística para problemas de optimización global; el objetivo general de este tipo de algoritmos es encontrar una buena aproximación al valor óptimo de una función en un espacio de búsqueda grande. A este valor óptimo se lo denomina \"óptimo global\""
-                    + "En cada iteración, el método evalúa algunos vecinos del estado actual s y probabilísticamente decide entre efectuar una transición a un nuevo estado S' o quedarse en el estado S. "
-                    + "El vecindario de un estado s está compuesto por todos los estados a los que se pueda llegar a partir de s mediante un cambio en la solución actual."
-                    + "A medida que la temperatura tiende al mínimo, la probabilidad de transición a un estado de mayor energía tiende a cero asintóticamente. Cuando T llega a cero, el algoritmo solo aceptará cambios a estados con menor energía. Debido a esta propiedad, la temperatura juega un papel muy importante en el control de la evolución del sistema. A temperaturas altas, el sistema tenderá a saltos de energía grandes entre los estados, mientras que a temperaturas más bajas, los cambios en energía serán menores.");
+		this.txtInfo.append("Es un algoritmo de búsqueda meta-heurística para problemas de optimización global; el objetivo general de este tipo de algoritmos es encontrar una buena aproximación al valor óptimo de una función en un espacio de búsqueda grande.\n\n A este valor óptimo se lo denomina \"óptimo global\""
+                    + "\nEn cada iteración, el método evalúa algunos vecinos del estado actual y probabilísticamente decide entre efectuar una transición a un nuevo estado o quedarse en el estado actual. \n"                    
+                    + "\nA medida que la temperatura tiende al mínimo, la probabilidad de transición a un estado de mayor energía tiende a cero asintóticamente. \nCuando T llega a cero, el algoritmo solo aceptará cambios a estados con menor probabilidad");
 		startAlgorithm.setVisible(false);	                      
     }//GEN-LAST:event_SimAnnMousePressed
 
@@ -505,6 +506,8 @@ public class main_panel extends javax.swing.JFrame {
         labelTitle.setText("Basadas en Trayectorias");
         _heuristicSelected = "AllTrayectories";
 	jpanelList.setVisible(true);
+        this.txtInfo.setText("");
+        this.txtInfo.append("Ejecución de todas las MH basadas en trayectorias para comparativa.");                
         startAlgorithm.setVisible(false);
     }//GEN-LAST:event_AllMHMousePressed
 
@@ -514,6 +517,9 @@ public class main_panel extends javax.swing.JFrame {
         labelTitle.setText("Algoritmos Poblacionales");
         _heuristicSelected = "GeneticAlgorithm";
 	jpanelList.setVisible(true);
+        this.txtInfo.setText("");
+        this.txtInfo.append("Los algoritmos genéticos son de probada eficacia en caso de querer calcular funciones no derivables (o de derivación muy compleja) aunque su uso es posible con cualquier función."
+                + "Estos algoritmos hacen evolucionar una población de individuos sometiéndola a acciones aleatorias semejantes a las que actúan en la evolución biológica (mutaciones y recombinaciones genéticas), así como también a una selección de acuerdo con algún criterio, en función del cual se decide cuáles son los individuos más adaptados, que sobreviven, y cuáles los menos aptos, que son descartados.");                                
         startAlgorithm.setVisible(false);        
     }//GEN-LAST:event_GeneticAlgorithmMousePressed
 
@@ -523,6 +529,10 @@ public class main_panel extends javax.swing.JFrame {
         labelTitle.setText("Colonias de Hormigas");
         _heuristicSelected = "AntColony";
 	jpanelList.setVisible(true);
+        this.txtInfo.setText("");
+        this.txtInfo.append("Las hormigas (inicialmente) vagan de manera aleatoria, al azar, y una vez encontrada comida regresan a su colonia dejando un rastro de feromonas. Si otras hormigas encuentran dicho rastro, es probable que estas no sigan caminando aleatoriamente, puede que estas sigan el rastro de feromonas, regresando y reforzándolo si estas encuentran comida finalmente.\n" +
+                    "\n" +
+                    "Sin embargo, al paso del tiempo el rastro de feromonas comienza a evaporarse, reduciéndose así su fuerza de atracción. Cuanto más tiempo le tome a una hormiga viajar por el camino y regresar de vuelta otra vez, más tiempo tienen las feromonas para evaporarse. Un camino corto, en comparación, es marchado más frecuentemente, y por lo tanto la densidad de feromonas se hace más grande en caminos cortos que en los largos. ");                                                
         startAlgorithm.setVisible(false);                   
     }//GEN-LAST:event_AntColonyOptimizationMousePressed
 
@@ -604,6 +614,7 @@ public class main_panel extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem AllMH;
+    private javax.swing.JMenu AntColony;
     private javax.swing.JMenuItem AntColonyOptimization;
     private javax.swing.JPanel DisplayPanel;
     private javax.swing.JMenuItem GeneticAlgorithm;
@@ -612,15 +623,14 @@ public class main_panel extends javax.swing.JFrame {
     private javax.swing.JMenu JMenuOut;
     private javax.swing.JMenuItem LocalSearch;
     private javax.swing.JDialog ParamsDialog;
+    private javax.swing.JMenu Population;
     private javax.swing.JMenuItem SimAnn;
     private javax.swing.JMenuItem TabuSearch;
+    private javax.swing.JMenu Trayectories;
     private javax.swing.JMenuItem exportGraphic;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenu jMenu4;
-    private javax.swing.JMenu jMenu5;
-    private javax.swing.JMenu jMenu6;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jpanelInfo;

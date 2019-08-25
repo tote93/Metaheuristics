@@ -44,10 +44,10 @@ public class MQKPGeneticAlgorithm extends MQKPMetaheuristics{
 	 *  _offMeanResults Media de los valores fitness de las nuevas soluciones generadas
 	 *  _bestPerIterations Mejor valor en cada iteración
 	 */
-	ArrayList<Double> _results = new ArrayList<>();;
-	ArrayList<Double> _popMeanResults = new ArrayList<>();;
-	ArrayList<Double> _offMeanResults = new ArrayList<>();;
-	ArrayList<Double> _bestPerIterations = new ArrayList<>();;
+	ArrayList<Double> _results = new ArrayList<>();
+	ArrayList<Double> _popMeanResults = new ArrayList<>();
+	ArrayList<Double> _offMeanResults = new ArrayList<>();
+	ArrayList<Double> _bestPerIterations = new ArrayList<>();
 
 	/**
 	 * Función que busca el índice de la mejor solución en un ArrayList
