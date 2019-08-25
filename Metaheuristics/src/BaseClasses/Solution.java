@@ -1,29 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package BaseClasses;
+
+import java.util.ArrayList;
 
 /**
  *
- * @author josel
+ * @author i62gorej
  */
-public class Solution {
-    private double _fitness = 0;
-    
-    public double getFitness(){
-        return _fitness;
-    }
-    
-    public void copy(Solution sol) {}
-
-    public int whereIsObject(int i) {
-        return 0;
-    }
-    
-    public void setFitness(double d){
-        _fitness = d;
-    }
-    
+public interface Solution {
+    ArrayList<Integer> _sol = new ArrayList<>();
+    boolean _fitnessAssigned = false;
+    double getFitness();
+    public void copy(Solution sol);
 }
