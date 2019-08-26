@@ -113,7 +113,7 @@ public class main_panel extends javax.swing.JFrame {
 
         listAlgorithms.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         listAlgorithms.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Algoritmo de la mochila", "Proximamente..." };
+            String[] strings = { "Algoritmo de la mochila", "Optimización de funciones", "Proximamente..." };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
@@ -357,7 +357,7 @@ public class main_panel extends javax.swing.JFrame {
 	 */
 	private void testingButtonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_testingButtonMousePressed
 
-		mainClass mc = new mainClass("Algoritmo de la mochila", "AntColony");
+		mainClass mc = new mainClass("Optimización de funciones", "LocalSearch");
 		XYSeriesCollection dataset = mc.initialise();
 		GenGraphic g = new GenGraphic(dataset, "AntColony");
 		ChartPanel chart = g.createChartPanel();
@@ -402,6 +402,13 @@ public class main_panel extends javax.swing.JFrame {
 			                    + "Algunos algoritmos existentes pueden resolverlo en la práctica para casos de un gran tamaño.\n ");
 			this.startAlgorithm.setVisible(true);
 			break;
+                case "Optimización de funciones":
+			this.txtInfo.setVisible(true);
+			this.jpanelInfo.setVisible(true);
+			this.txtInfo.setText("");
+			this.txtInfo.append("La minimización de funciones puede resultar una tarea complicada en aplicaciones prácticas debido a que estas pueden tener mínimos locales" +
+                                "En Matemática y Ciencia de la Computación el concepto de optimización se refiere a escoger el \"mejor elemento\" de un conjunto disponible de alternativas. En el caso más simple, esto significa resolver problemas en los que se busca minimizar (o maximizar) una función real escogiendo sistemáticamente valores de variables reales de un conjunto permitido.\n" +"\n");
+			this.startAlgorithm.setVisible(true);                    
 		default:
 			break;
 		}

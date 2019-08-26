@@ -1,6 +1,15 @@
 
 package BaseClasses;
 
+import Algorithms.FunctionOpt.FunctOptEvaluator;
+import Algorithms.FunctionOpt.FunctOptInstance;
+import Algorithms.FunctionOpt.FunctOptLocalSearch;
+import Algorithms.FunctionOpt.FunctOptNeighExplorer;
+import Algorithms.FunctionOpt.FunctOptSimpleBestImprovement;
+import Algorithms.FunctionOpt.FunctOptSimpleFirstImprovement;
+import Algorithms.FunctionOpt.FunctOptSolGenerator;
+import Algorithms.FunctionOpt.FunctOptSolution;
+import Algorithms.FunctionOpt.genFunction;
 import Algorithms.Knapsack.MQKPAntColonyOpt;
 import Algorithms.Knapsack.MQKPNeighExplorer;
 import Algorithms.Knapsack.MQKPEvaluator;
@@ -59,6 +68,8 @@ public class mainClass {
 	int MAX_SOLUTIONS_PER_RUN = 100000;
 	int MAX_INITIAL_SOLUTIONS = 5;
 	int MAX_SECONS_PER_RUN = 5;
+        String function = "";
+        int range = 0, precision = 0;        
 	/**
 	 * Constructor por defecto
 	 */
@@ -236,6 +247,29 @@ public class mainClass {
 				break;
 			}
 			break;
+                case "Optimización de funciones":
+                    switch(_heuristic){
+                        case "LocalSearch":
+                                createDialog();
+                                FunctOptInstance climb = new FunctOptInstance();
+                                climb.setFunction(function);
+                                climb.setRange(range);
+                                climb.setPrecision(precision);
+                                
+				FunctOptSimpleFirstImprovement firstExplorer = new FunctOptSimpleFirstImprovement();
+                                XYSeries serieFirst = new XYSeries("Escalada Simple");
+                                serieFirst.setDescription("Escalada Simple");
+				this.runALSExperiment(results, climb, firstExplorer, serieFirst);
+                                dataset.addSeries(serieFirst);
+                                
+                                XYSeries serieBest = new XYSeries("Escalada Max. Pendiente");
+                                serieBest.setDescription("Escalada Max. Pendiente");
+                                FunctOptSimpleBestImprovement  bestExplorer = new FunctOptSimpleBestImprovement();
+                                this.runALSExperiment(results, climb, bestExplorer, serieBest);
+                                dataset.addSeries(serieBest); 	
+                            break;
+                    }
+                    break;
 		default:
 			break;
 		}
@@ -296,7 +330,7 @@ public class mainClass {
 	 * @param exp Objeto que explorará el vecindario de soluciones
          * @param serie Serie de elementos para mostrar por pantalla
 	 */
-      public void runALSExperiment(ArrayList results, MQKPInstance instance, MQKPNeighExplorer exp, XYSeries serie) {
+    public void runALSExperiment(ArrayList results, MQKPInstance instance, MQKPNeighExplorer exp, XYSeries serie) {
                 
 		MQKPLocalSearch ls = new MQKPLocalSearch();
 
@@ -337,7 +371,7 @@ public class mainClass {
 		for (int i = 0; i < results.size(); i++)
 			serie.add(i+1, (double) results.get(i));                
 	}                
-      public void runAGraspExperiment(ArrayList results, MQKPInstance instance, XYSeries serie, XYSeries bestSerie){
+    public void runAGraspExperiment(ArrayList results, MQKPInstance instance, XYSeries serie, XYSeries bestSerie){
             MQKPSolution initialSolution = new MQKPSolution(instance);
             MQKPGrasp grasp = new MQKPGrasp();
             StopCondition stopCond = new StopCondition();
@@ -365,7 +399,7 @@ public class mainClass {
                 bestSerie.add(i+1,Math.max(bestSerie.getMaxY(), (double) resultsGrasp.get(i)));                
             }
         }
-      public void runIGreedyExperiment(ArrayList results, MQKPInstance instance, XYSeries serie, XYSeries bestSerie){
+    public void runIGreedyExperiment(ArrayList results, MQKPInstance instance, XYSeries serie, XYSeries bestSerie){
             MQKPSolution initialSolution = new MQKPSolution(instance);
             MQKPIteratedGreedy ig = new MQKPIteratedGreedy();
             StopCondition stopCond = new StopCondition();
@@ -394,7 +428,7 @@ public class mainClass {
                 bestSerie.add(i+1,Math.max(bestSerie.getMaxY(), (double) resultsIG.get(i)));                
             }
         }        
-      public void runSAExperiment(ArrayList results, MQKPInstance instance, XYSeries serie){
+    public void runSAExperiment(ArrayList results, MQKPInstance instance, XYSeries serie){
             MQKPSolution initialSolution = new MQKPSolution(instance);
             MQKPSimulatedAnnealing SA = new MQKPSimulatedAnnealing();
             StopCondition stopCond = new StopCondition();
@@ -421,7 +455,7 @@ public class mainClass {
                 serie.add(i+1, (double) resultsSA.get(i));                              
             }
         }            
-      public void runTSExperiment(ArrayList results, MQKPInstance instance, XYSeries serie){
+    public void runTSExperiment(ArrayList results, MQKPInstance instance, XYSeries serie){
             MQKPSolution initialSolution = new MQKPSolution(instance);
             MQKPTabuSearch TS = new MQKPTabuSearch();
             StopCondition stopCond = new StopCondition();
@@ -448,7 +482,7 @@ public class mainClass {
                 serie.add(i+1, (double) resultsTS.get(i));                              
             }
         }
-      public void runAllTrayectoriesExperiment(ArrayList results, MQKPInstance instance, XYSeries AllTabuSearch, XYSeries AllGrasp, XYSeries AllSimAnn ,XYSeries AllIteratedGreedy){
+    public void runAllTrayectoriesExperiment(ArrayList results, MQKPInstance instance, XYSeries AllTabuSearch, XYSeries AllGrasp, XYSeries AllSimAnn ,XYSeries AllIteratedGreedy){
             MQKPSolution initialSolution = new MQKPSolution(instance);
             MQKPTabuSearch TS = new MQKPTabuSearch();
             StopCondition stopCond = new StopCondition();
@@ -550,7 +584,7 @@ public class mainClass {
             for(int i = 0; i < resultsGrasp.size(); i++)
                 AllGrasp.add(i+1, (double) resultsGrasp.get(i));              
         }
-      public void runAGExperiment(ArrayList results, MQKPInstance instance,XYSeries serieGenetic, XYSeries bestGenetic){
+    public void runAGExperiment(ArrayList results, MQKPInstance instance,XYSeries serieGenetic, XYSeries bestGenetic){
 	//Inicialización
             MQKPGeneticAlgorithm ga = new MQKPGeneticAlgorithm();
             StopCondition stopCond = new StopCondition();
@@ -576,7 +610,7 @@ public class mainClass {
             }            
         }
        
-      void runACOExperiment(ArrayList results,MQKPInstance instance,XYSeries currenACO, XYSeries bestACO){
+    void runACOExperiment(ArrayList results,MQKPInstance instance,XYSeries currenACO, XYSeries bestACO){
 	//Inicialización
             MQKPAntColonyOpt aco = new MQKPAntColonyOpt();
             StopCondition stopCond = new StopCondition();
@@ -596,9 +630,8 @@ public class mainClass {
             for (int i = 0; i < resultsACO.size();i++)
                 currenACO.add(i, resultsACO.get(i));           
        }
-       
-       
-      private void generateOptionsGAKnapsackProblem(){
+    
+    private void generateOptionsGAKnapsackProblem(){
             this._dialog.setLayout(new GridLayout(0,2,1,2));
             //Generamos los elementos del modal:
             JLabel label = new JLabel("Número de mochilas");
@@ -726,7 +759,7 @@ public class mainClass {
             _dialog.add(btn);            
         }
 
-      private void generateOptionsACOKnapsackProblem(){
+    private void generateOptionsACOKnapsackProblem(){
             this._dialog.setLayout(new GridLayout(0,2,1,2));
             //Generamos los elementos del modal:
             JLabel label = new JLabel("Número de mochilas");
@@ -796,6 +829,62 @@ public class mainClass {
             });            
             _dialog.add(btn);            
         }       
+
+    private void createDialog() {
+        
+        this._dialog.setSize(420, 380);
+        genFunction gen = new genFunction();
+        this._dialog.setLayout(new GridLayout(1,6,1,6));
+        this._dialog.add(gen);
+        this._dialog.setVisible(true);
+        this.function = gen.getFunct();
+        this.range = gen.getRange();
+        this.precision = gen.getPrecision();
+        this._dialog.dispose();
+    }
+
+    private void runALSExperiment(ArrayList<Double> results, FunctOptInstance instance, FunctOptNeighExplorer exp, XYSeries serie) {
+                
+		FunctOptLocalSearch ls = new FunctOptLocalSearch();
+
+		FunctOptSolution initialSolution = new FunctOptSolution(instance);
+
+		MQKPEvaluator.resetNumEvaluations();
+
+		FunctOptSolGenerator.genRandomSol(instance, initialSolution);
+		double currentFitness = FunctOptEvaluator.computeFitness(instance, initialSolution);
+		
+                //Reseteamos el array de results para evitar concatenar series
+                results.clear();
+		initialSolution.setFitness(currentFitness);
+		results.add(currentFitness);
+                
+		int numInitialSolutions = 0;
+		long start = System.currentTimeMillis();
+		long timeElapsed = 0;               		
+		serie.add(0, currentFitness);
+
+		while (timeElapsed <= MAX_SECONS_PER_RUN && MQKPEvaluator.getNumEvaluations() < MAX_SOLUTIONS_PER_RUN &&
+		        numInitialSolutions < MAX_INITIAL_SOLUTIONS) {
+			FunctOptSolGenerator.genRandomSol(instance, initialSolution);
+			currentFitness = FunctOptEvaluator.computeFitness(instance, initialSolution);
+			initialSolution.setFitness(currentFitness);
+
+			results.add(currentFitness);
+			
+                        ls.optimise(instance, exp, initialSolution);                        
+                        //Volcado de los datos al array de resultados
+			ArrayList<Double> resultsLS = ls.getResults();
+			for (int i = 0; i < resultsLS.size(); i++) 
+				results.add(resultsLS.get(i));
+			
+			timeElapsed = (long) ((System.currentTimeMillis() - start) / 1000F);
+                        numInitialSolutions++;
+		}
+		for (int i = 0; i < results.size(); i++)
+			serie.add(i+1, (double) results.get(i));         
+    }
+
 }
        
 
