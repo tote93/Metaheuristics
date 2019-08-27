@@ -5,7 +5,11 @@
  */
 package MainProgram;
 
+
 import BaseClasses.mainClass;
+import com.orsoncharts.Chart3D;
+import com.orsoncharts.Chart3DPanel;
+import com.orsoncharts.data.xyz.XYZDataset;
 import java.awt.AWTException;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -15,6 +19,7 @@ import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -33,6 +38,7 @@ public class main_panel extends javax.swing.JFrame {
 	// Variable empleada para seleccionar la heuristica a usar
 	String _heuristicSelected = null;
 	Boolean CloseProgram = false;
+        String _parameters = "";
 	/**
 	 * Constructor por defecto, inicializa los elementos visuales y les modifica el estado
 	 * @throws IOException
@@ -358,12 +364,15 @@ public class main_panel extends javax.swing.JFrame {
 	private void testingButtonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_testingButtonMousePressed
 
 		mainClass mc = new mainClass("Optimización de funciones", "LocalSearch");
-		XYSeriesCollection dataset = mc.initialise();
-		GenGraphic g = new GenGraphic(dataset, "AntColony");
-		ChartPanel chart = g.createChartPanel();
-		chart.setSize(new Dimension(DisplayPanel.getWidth(), DisplayPanel.getHeight()));
+		XYZDataset<String> dataset = mc.initialise3D();
+                this._parameters = mc.getFunctionType();
+                ArrayList<Double> array = mc.getBestPoints();
+		GenGraphic3D g = new GenGraphic3D(dataset, mc.getFunctionType(), array);
+		Chart3D chart = g.create3DGraph();
+                Chart3DPanel panel = new Chart3DPanel(chart);
+		panel.setSize(new Dimension(DisplayPanel.getWidth(), DisplayPanel.getHeight()));
 		DisplayPanel.removeAll();
-		DisplayPanel.add(chart);
+		DisplayPanel.add(panel);
 		DisplayPanel.validate();
 		DisplayPanel.repaint();
 	}//GEN-LAST:event_testingButtonMousePressed
@@ -406,7 +415,7 @@ public class main_panel extends javax.swing.JFrame {
 			this.txtInfo.setVisible(true);
 			this.jpanelInfo.setVisible(true);
 			this.txtInfo.setText("");
-			this.txtInfo.append("La minimización de funciones puede resultar una tarea complicada en aplicaciones prácticas debido a que estas pueden tener mínimos locales" +
+			this.txtInfo.append("La minimización de funciones puede resultar una tarea complicada en aplicaciones prácticas debido a que estas pueden tener mínimos locales.\n" +
                                 "En Matemática y Ciencia de la Computación el concepto de optimización se refiere a escoger el \"mejor elemento\" de un conjunto disponible de alternativas. En el caso más simple, esto significa resolver problemas en los que se busca minimizar (o maximizar) una función real escogiendo sistemáticamente valores de variables reales de un conjunto permitido.\n" +"\n");
 			this.startAlgorithm.setVisible(true);                    
 		default:

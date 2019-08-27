@@ -20,6 +20,7 @@ public class FunctOptInstance extends Instance{
     int _precision;
     int _size;
     String _function = "";
+    String _functType = "";
 
     /**
     * Constructor por defecto
@@ -28,6 +29,7 @@ public class FunctOptInstance extends Instance{
         this._range = 0;
         this._precision = 0;
         this._size = 0;
+        this._functType = "";
     }
     /**
      * Funciones Getter que devuelven la información de la instancia
@@ -36,7 +38,11 @@ public class FunctOptInstance extends Instance{
     public int getRange() {
         return this._range;
     }
-
+    
+    public String getFuncType() {
+        return this._functType;
+    }
+    
     public int getPrecision() {
         return this._precision;
     }
@@ -52,13 +58,22 @@ public class FunctOptInstance extends Instance{
      * Funciones Sets que establecen valores a la instancia 
      */
     
-    public void setSize(int S) {
-        this._size = S;
+    public void setSize() {
+        int value = (int) (this.getRange()*(Math.pow(10, this.getPrecision()))); 
+        int log = (int) (Math.log(value) / Math.log(2)); 
+        if(value > Math.pow(2, log)){
+            log++;
+        }
+        this._size = log;
     }    
     
     public void setRange(int R) {
         this._range = R;
     }
+    
+    public void setFuncType(String FT) {
+        this._functType = FT;
+    }   
     
     public void setFunction(String F) {
         this._function = F;
@@ -83,7 +98,7 @@ public class FunctOptInstance extends Instance{
         
         Random rand = new Random();
         for (int i = 0; i < size; i++) {
-            int pos = rand.nextInt(size);
+            int pos = rand.nextInt(2);
             int aux = perm.get(i);
             perm.set(i, perm.get(pos));
             perm.set(pos, aux);

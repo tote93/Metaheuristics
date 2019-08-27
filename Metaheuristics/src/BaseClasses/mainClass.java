@@ -25,6 +25,9 @@ import Algorithms.Knapsack.MQKPSolGenerator;
 import Algorithms.Knapsack.MQKPSolution;
 import Algorithms.Knapsack.MQKPTabuSearch;
 import Algorithms.Knapsack.StopCondition;
+import com.orsoncharts.data.xyz.XYZDataset;
+import com.orsoncharts.data.xyz.XYZSeries;
+import com.orsoncharts.data.xyz.XYZSeriesCollection;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -65,11 +68,14 @@ public class mainClass {
         private String _selector = "";
         private String _mutate = "";
 	// Parametros de parada de las heuristicas
-	int MAX_SOLUTIONS_PER_RUN = 100000;
-	int MAX_INITIAL_SOLUTIONS = 5;
-	int MAX_SECONS_PER_RUN = 5;
-        String function = "";
-        int range = 0, precision = 0;        
+	private int MAX_SOLUTIONS_PER_RUN = 100000;
+	private int MAX_INITIAL_SOLUTIONS = 5;
+	private int MAX_SECONS_PER_RUN = 5;
+        private String function = "";
+        private int range = 0, precision = 0;        
+
+        ArrayList<Double> ejesCoordenadas = new ArrayList<>(); 
+        private String _funcType;
 	/**
 	 * Constructor por defecto
 	 */
@@ -90,7 +96,7 @@ public class mainClass {
 	 * Inicializa los parametros, instancias, etc y ejecuta el algoritmo
 	 * @return XYSeriesCollection Conjunto de Series XY para hacer el display
 	 */
-	public XYSeriesCollection initialise() {
+	public XYSeriesCollection initialise()  {
 		//Selector de algoritmo y _heuristica usada
 		XYSeriesCollection dataset = new XYSeriesCollection();
                 ArrayList<Double> results = new ArrayList<>();    
@@ -247,29 +253,6 @@ public class mainClass {
 				break;
 			}
 			break;
-                case "Optimización de funciones":
-                    switch(_heuristic){
-                        case "LocalSearch":
-                                createDialog();
-                                FunctOptInstance climb = new FunctOptInstance();
-                                climb.setFunction(function);
-                                climb.setRange(range);
-                                climb.setPrecision(precision);
-                                
-				FunctOptSimpleFirstImprovement firstExplorer = new FunctOptSimpleFirstImprovement();
-                                XYSeries serieFirst = new XYSeries("Escalada Simple");
-                                serieFirst.setDescription("Escalada Simple");
-				this.runALSExperiment(results, climb, firstExplorer, serieFirst);
-                                dataset.addSeries(serieFirst);
-                                
-                                XYSeries serieBest = new XYSeries("Escalada Max. Pendiente");
-                                serieBest.setDescription("Escalada Max. Pendiente");
-                                FunctOptSimpleBestImprovement  bestExplorer = new FunctOptSimpleBestImprovement();
-                                this.runALSExperiment(results, climb, bestExplorer, serieBest);
-                                dataset.addSeries(serieBest); 	
-                            break;
-                    }
-                    break;
 		default:
 			break;
 		}
@@ -841,50 +824,94 @@ public class mainClass {
         this.range = gen.getRange();
         this.precision = gen.getPrecision();
         this._dialog.dispose();
+        this._funcType = gen.getFunctType();
     }
 
-    private void runALSExperiment(ArrayList<Double> results, FunctOptInstance instance, FunctOptNeighExplorer exp, XYSeries serie) {
+    private void runALSExperiment(ArrayList<Double> results, FunctOptInstance instance, FunctOptNeighExplorer exp,  XYZSeries<String> serie) {
                 
 		FunctOptLocalSearch ls = new FunctOptLocalSearch();
 
 		FunctOptSolution initialSolution = new FunctOptSolution(instance);
 
 		MQKPEvaluator.resetNumEvaluations();
-
+                
 		FunctOptSolGenerator.genRandomSol(instance, initialSolution);
-		double currentFitness = FunctOptEvaluator.computeFitness(instance, initialSolution);
-		
+		double currentFitness = FunctOptEvaluator.computeFitness(instance, initialSolution);                
+                double FitnessRound = Math.round(currentFitness * Math.pow(10, instance.getPrecision())) / Math.pow(10, instance.getPrecision());
                 //Reseteamos el array de results para evitar concatenar series
                 results.clear();
-		initialSolution.setFitness(currentFitness);
-		results.add(currentFitness);
+		initialSolution.setFitness(FitnessRound);
+		results.add(FitnessRound);
                 
 		int numInitialSolutions = 0;
 		long start = System.currentTimeMillis();
 		long timeElapsed = 0;               		
-		serie.add(0, currentFitness);
-
+		serie.add(initialSolution.getBestNumberX(), initialSolution.getBestNumberY(), initialSolution.getBestNumberZ());
+                ArrayList<Double> resultsLSX = new ArrayList<>();
+                ArrayList<Double> resultsLSY = new ArrayList<>();
+                ArrayList<Double> resultsLSZ = new ArrayList<>();
 		while (timeElapsed <= MAX_SECONS_PER_RUN && MQKPEvaluator.getNumEvaluations() < MAX_SOLUTIONS_PER_RUN &&
-		        numInitialSolutions < MAX_INITIAL_SOLUTIONS) {
+		        numInitialSolutions < MAX_INITIAL_SOLUTIONS*10){
 			FunctOptSolGenerator.genRandomSol(instance, initialSolution);
-			currentFitness = FunctOptEvaluator.computeFitness(instance, initialSolution);
-			initialSolution.setFitness(currentFitness);
+			FitnessRound = FunctOptEvaluator.computeFitness(instance, initialSolution);
+                        FitnessRound = Math.round(FitnessRound * Math.pow(10, instance.getPrecision())) / Math.pow(10, instance.getPrecision());
+			initialSolution.setFitness(FitnessRound);
 
-			results.add(currentFitness);
-			
+			results.add(FitnessRound);
+			serie.add(initialSolution.getBestNumberX(), initialSolution.getBestNumberY(), initialSolution.getBestNumberZ());
+
                         ls.optimise(instance, exp, initialSolution);                        
                         //Volcado de los datos al array de resultados
-			ArrayList<Double> resultsLS = ls.getResults();
-			for (int i = 0; i < resultsLS.size(); i++) 
-				results.add(resultsLS.get(i));
+			resultsLSX = ls.getResultsX();
+                        resultsLSY = ls.getResultsY();
+                        resultsLSZ = ls.getResultsZ();
+			for (int i = 0; i < resultsLSX.size(); i++) 
+				serie.add(resultsLSX.get(i), resultsLSY.get(i),  resultsLSZ.get(i));
 			
 			timeElapsed = (long) ((System.currentTimeMillis() - start) / 1000F);
                         numInitialSolutions++;
 		}
-		for (int i = 0; i < results.size(); i++)
-			serie.add(i+1, (double) results.get(i));         
+                ejesCoordenadas.add(resultsLSX.get(resultsLSX.size()-1));
+                ejesCoordenadas.add(resultsLSY.get(resultsLSY.size()-1));
+                ejesCoordenadas.add(resultsLSZ.get(resultsLSZ.size()-1));
     }
 
+    public String getFunctionType() {
+        return function;
+    }
+    public ArrayList<Double> getBestPoints(){        
+        return ejesCoordenadas;
+    }
+    public XYZDataset<String> initialise3D()  {
+		//Selector de algoritmo y _heuristica usada
+		XYZSeriesCollection<String> dataset = new XYZSeriesCollection<>();
+                ArrayList<Double> results = new ArrayList<>();    
+		switch (_algorithm) {
+                case "Optimización de funciones":
+                    switch(_heuristic){
+                        case "LocalSearch":
+                                createDialog();
+                                FunctOptInstance climb = new FunctOptInstance();
+                                climb.setFunction(function);
+                                climb.setRange(range);
+                                climb.setPrecision(precision);
+                                climb.setSize();     
+                                climb.setFuncType(this._funcType);
+				FunctOptSimpleFirstImprovement firstExplorer = new FunctOptSimpleFirstImprovement();
+                                XYZSeries<String> serieFirst = new XYZSeries<>("Escalada Simple");                                
+				this.runALSExperiment(results, climb, firstExplorer, serieFirst);
+                                dataset.add(serieFirst);
+                                
+                                XYZSeries<String> serieBest = new  XYZSeries<>("Max. Pendiente");
+                                FunctOptSimpleBestImprovement  bestExplorer = new FunctOptSimpleBestImprovement();
+                                this.runALSExperiment(results, climb, bestExplorer, serieBest);
+                                dataset.add(serieBest);
+                                break;
+                    }
+                    break;
+		default:
+			break;
+		}
+		return dataset;
+	}
 }
-       
-

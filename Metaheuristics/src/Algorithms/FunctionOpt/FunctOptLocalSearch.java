@@ -14,7 +14,9 @@ public class FunctOptLocalSearch {
     /**
      * Vector de doubles donde almacena la calidad de la última solución aceptada
      */
-    private ArrayList<Double> _results = new ArrayList<>();
+    private ArrayList<Double> _resultsX = new ArrayList<>();
+    private ArrayList<Double> _resultsY = new ArrayList<>();
+    private ArrayList<Double> _resultsZ = new ArrayList<>();
 
     public FunctOptLocalSearch() {
     }
@@ -25,13 +27,22 @@ public class FunctOptLocalSearch {
     * @param sol Solución inicial que se optimiza localmente. El resultado final se devuelve en ella.
     */
     public void optimise(FunctOptInstance inst, FunctOptNeighExplorer exp, FunctOptSolution sol) {
-        this._results.clear();
-        this._results.add(sol.getFitness());
+        this._resultsX.clear();
+        this._resultsX.add(sol.getBestNumberX());
+        
+        this._resultsY.clear();
+        this._resultsY.add(sol.getBestNumberY());
+
+        this._resultsZ.clear();
+        this._resultsZ.add(sol.getBestNumberZ());        
+        
         FunctOptAssignmentOperation operation = new FunctOptAssignmentOperation();
         
         while (exp.findOperation(inst, sol, operation)) {
             operation.apply(sol);
-            this._results.add(sol.getFitness());
+            this._resultsX.add(sol.getBestNumberX());
+            this._resultsY.add(sol.getBestNumberY());
+            this._resultsZ.add(sol.getBestNumberZ());
         }
     }
     /**
@@ -39,9 +50,15 @@ public class FunctOptLocalSearch {
     *
     * @return vector con los resultados de las soluciones aceptadas, en cada paso, por la búsqueda local
     */   
-    public ArrayList<Double> getResults() {
-        return this._results;
+    public ArrayList<Double> getResultsX() {
+        return this._resultsX;
     }
+    public ArrayList<Double> getResultsY() {
+        return this._resultsY;
+    } 
+    public ArrayList<Double> getResultsZ() {
+        return this._resultsZ;
+    }     
 
 
 }

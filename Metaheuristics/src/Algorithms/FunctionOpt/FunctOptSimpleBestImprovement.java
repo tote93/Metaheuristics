@@ -5,9 +5,6 @@
  */
 package Algorithms.FunctionOpt;
 
-import Algorithms.FunctionOpt.FunctOptChangeOperation;
-import Algorithms.FunctionOpt.FunctOptInstance;
-import Algorithms.FunctionOpt.FunctOptSolution;
 import java.util.ArrayList;
 
 /**
@@ -27,21 +24,30 @@ public class FunctOptSimpleBestImprovement implements FunctOptNeighExplorer{
 
         int numElem = instance.getSize();
         FunctOptInstance.randomPermutation(numElem, perm);
-        int rango = instance.getRange();
+        String type = instance.getFuncType();
         boolean initialised = false;
         double bestDeltaFitness = 0;
         double deltaFitness = 0.0;
 
         for (int i = 0; i < numElem; i++) {
-            for (int j = 0; j <= rango; j++) {
+            for (int j = 0; j <= 1; j++) {
                 deltaFitness = FunctOptEvaluator.computeDeltaFitness(instance, solution, perm.get(i), j);
-                if (deltaFitness > bestDeltaFitness || !initialised) {
-                    initialised = true;
-                    bestDeltaFitness = deltaFitness;
-                    oaOperation.setValues(perm.get(i), j, bestDeltaFitness);
+                if(type.equals("Maximización")){
+                    if (deltaFitness > bestDeltaFitness || !initialised) {
+                        initialised = true;
+                        bestDeltaFitness = deltaFitness;
+                        oaOperation.setValues(perm.get(i), j, bestDeltaFitness);
+                    }                    
+                }
+                else{
+                    if (deltaFitness < bestDeltaFitness || !initialised) {
+                        initialised = true;
+                        bestDeltaFitness = deltaFitness;
+                        oaOperation.setValues(perm.get(i), j, bestDeltaFitness);
+                    }                    
                 }
             }
         }
-        return (bestDeltaFitness > 0.0);
+        return (type.equals("Maximización")) ? (bestDeltaFitness > 0.0) : (bestDeltaFitness < 0.0);
     }
 }

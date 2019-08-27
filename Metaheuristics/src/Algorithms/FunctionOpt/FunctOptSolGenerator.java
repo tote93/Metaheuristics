@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 package Algorithms.FunctionOpt;
-import Algorithms.Knapsack.*;
 import java.util.Random;
 /**
  * Clase que genera una solución aleatoria al problema MQKP
@@ -21,12 +20,11 @@ public class FunctOptSolGenerator {
     */
     public static void genRandomSol(FunctOptInstance instance, FunctOptSolution sol) {
         int size = instance.getSize();
-        int range = instance.getRange();
-
         Random rand = new Random();
         for (int i = 0; i < size; i++) {
-            int randomKnapsack = rand.nextInt(range + 1);
-            sol.putNumberInX(i, randomKnapsack);
+            sol.putNumberInX(rand.nextInt(size), rand.nextInt(2));
+            sol.putNumberInY(rand.nextInt(size), rand.nextInt(2));
+            sol.putNumberInZ(rand.nextInt(size), rand.nextInt(2));
         }
     }
 }

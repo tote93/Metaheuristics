@@ -5,6 +5,8 @@
  */
 package Algorithms.FunctionOpt;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import net.objecthunter.exp4j.ExpressionBuilder;
 
@@ -25,27 +27,24 @@ public class FunctOptEvaluator {
     * @return Fitness de la solución. Será negativa si se viola la capacidad de alguna mochila y positiva si la solución es factible. En ese caso, el valor es igual a la suma de los beneficios individuales y cuadráticos
     */
     public static double computeFitness(FunctOptInstance instance, FunctOptSolution solution) {
-        
-        int value = transformInteger(solution.getArrayX());
+        ArrayList<Double> values = solution.transformInteger(instance.getPrecision());
         double fitness = new ExpressionBuilder(instance.getFunction())
             .variables("x")
+            .variables("y")
+            .variables("z")                
             .build()
-            .setVariable("x", value)
-           // .setVariable("y", 0.25d)
-           //.setVariable("z", 0.15d)
+            .setVariable("x", values.get(0))
+            .setVariable("y", values.get(1))
+            .setVariable("z", values.get(2))
             .evaluate();
+        //Transform to double with precision
+        BigDecimal bd = new BigDecimal(fitness);
+        bd = bd.setScale(instance.getPrecision(),RoundingMode.HALF_UP);
         
-        FunctOptEvaluator._numEvaluations++;
-        return fitness;
+        FunctOptEvaluator._numEvaluations++;        
+        return bd.doubleValue();
     }
-    private static int transformInteger(ArrayList<Integer> arrayX){
-        int value = 0, j = arrayX.size()-1;
-        for(int i = 0; i < arrayX.size();i++, j--){
-            if(arrayX.get(i) != 0)
-                value += Math.pow(2, j);          
-        }
-        return value;        
-    }
+
     /**
     * Función que calcula la diferencia en fitness si a la solución se le aplicase la asignación del objeto indexObject a la mochila indexKnapsack
     * @param instance Referencia a un objeto con la información de la instancia del problema FunctOpt
@@ -63,12 +62,20 @@ public class FunctOptEvaluator {
         FunctOptSolution sol = solution;
         //Actualizamos el nodo cambiando el nodo del indice "index" por node
         int node_aux = solution.getvalueX(index);
-        sol.changeElement(index, value);
-
+        int node_auxY = solution.getvalueY(index);
+        int node_auxZ = solution.getvalueZ(index);
+        
+        sol.changeElementX(index, value);
+        sol.changeElementY(index, value);
+        sol.changeElementZ(index, value);
+        
         //Calculamos Fitness del cambio de nodo
         double newFitness = FunctOptEvaluator.computeFitness(instance, sol);
         //retornamos la diferencia de fitness
-        sol.changeElement(index, node_aux);
+        sol.changeElementX(index, node_aux);
+        sol.changeElementY(index, node_auxY);
+        sol.changeElementZ(index, node_auxZ);
+        
         return newFitness - actualFitness;
     }
     /**

@@ -1,11 +1,9 @@
 package Algorithms.FunctionOpt;
 
 
-import java.awt.Color;
 import java.awt.Window;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
-import net.objecthunter.exp4j.ExpressionBuilder;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -35,6 +33,7 @@ public class genFunction extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jComboBox1 = new javax.swing.JComboBox<>();
         jPanel1 = new javax.swing.JPanel();
         txtFunction = new javax.swing.JTextField();
         sliderRange = new javax.swing.JSlider();
@@ -63,8 +62,11 @@ public class genFunction extends javax.swing.JPanel {
         btnPlus = new javax.swing.JButton();
         btnRightP = new javax.swing.JButton();
         btnMult = new javax.swing.JButton();
-        btnMinus1 = new javax.swing.JButton();
         btnLeftP = new javax.swing.JButton();
+        ComboFuncType = new javax.swing.JComboBox<>();
+        btnMinus1 = new javax.swing.JButton();
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Maximización", "Minimización" }));
 
         setMinimumSize(new java.awt.Dimension(600, 600));
         setOpaque(false);
@@ -73,14 +75,17 @@ public class genFunction extends javax.swing.JPanel {
         setVerifyInputWhenFocusTarget(false);
 
         txtFunction.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtFunction.setText("(cos(2x)*e^y) * sin(3z - y) +log10(x+z)^2");
         txtFunction.setToolTipText("sin(2*x)+cos(3-y)*(z+3*x+2*y)");
         txtFunction.setDoubleBuffered(true);
 
         sliderRange.setMaximum(200);
-        sliderRange.setMinorTickSpacing(5);
+        sliderRange.setMinorTickSpacing(1);
         sliderRange.setPaintLabels(true);
+        sliderRange.setPaintTrack(false);
+        sliderRange.setSnapToTicks(true);
         sliderRange.setToolTipText("Value");
-        sliderRange.setValue(0);
+        sliderRange.setValue(100);
         sliderRange.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 sliderRangeStateChanged(evt);
@@ -159,7 +164,7 @@ public class genFunction extends javax.swing.JPanel {
         });
 
         btnLogB.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnLogB.setText("logb2");
+        btnLogB.setText("log2");
         btnLogB.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 btnLogBMousePressed(evt);
@@ -176,6 +181,9 @@ public class genFunction extends javax.swing.JPanel {
 
         btnVarZ.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnVarZ.setText("Z");
+        btnVarZ.setMaximumSize(new java.awt.Dimension(43, 25));
+        btnVarZ.setMinimumSize(new java.awt.Dimension(43, 25));
+        btnVarZ.setPreferredSize(new java.awt.Dimension(43, 25));
         btnVarZ.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 btnVarZMousePressed(evt);
@@ -192,6 +200,9 @@ public class genFunction extends javax.swing.JPanel {
 
         btnDiv.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnDiv.setText("/");
+        btnDiv.setMaximumSize(new java.awt.Dimension(43, 25));
+        btnDiv.setMinimumSize(new java.awt.Dimension(43, 25));
+        btnDiv.setPreferredSize(new java.awt.Dimension(43, 25));
         btnDiv.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 btnDivMousePressed(evt);
@@ -200,6 +211,9 @@ public class genFunction extends javax.swing.JPanel {
 
         btnVarY.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnVarY.setText("Y");
+        btnVarY.setMaximumSize(new java.awt.Dimension(43, 25));
+        btnVarY.setMinimumSize(new java.awt.Dimension(43, 25));
+        btnVarY.setPreferredSize(new java.awt.Dimension(43, 25));
         btnVarY.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 btnVarYMousePressed(evt);
@@ -228,10 +242,10 @@ public class genFunction extends javax.swing.JPanel {
         jTextField2.setBorder(null);
 
         sliderPrecision.setMaximum(10);
-        sliderPrecision.setMinorTickSpacing(5);
+        sliderPrecision.setMinorTickSpacing(1);
         sliderPrecision.setPaintLabels(true);
         sliderPrecision.setToolTipText("Value");
-        sliderPrecision.setValue(0);
+        sliderPrecision.setValue(5);
         sliderPrecision.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 sliderPrecisionStateChanged(evt);
@@ -243,6 +257,9 @@ public class genFunction extends javax.swing.JPanel {
 
         btnVarX.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnVarX.setText("X");
+        btnVarX.setMaximumSize(new java.awt.Dimension(43, 25));
+        btnVarX.setMinimumSize(new java.awt.Dimension(43, 25));
+        btnVarX.setPreferredSize(new java.awt.Dimension(43, 25));
         btnVarX.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 btnVarXMousePressed(evt);
@@ -251,6 +268,8 @@ public class genFunction extends javax.swing.JPanel {
 
         btnPlus.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnPlus.setText("+");
+        btnPlus.setToolTipText("");
+        btnPlus.setActionCommand("-");
         btnPlus.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 btnPlusMousePressed(evt);
@@ -259,6 +278,9 @@ public class genFunction extends javax.swing.JPanel {
 
         btnRightP.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnRightP.setText(")");
+        btnRightP.setMaximumSize(new java.awt.Dimension(43, 25));
+        btnRightP.setMinimumSize(new java.awt.Dimension(43, 25));
+        btnRightP.setPreferredSize(new java.awt.Dimension(43, 25));
         btnRightP.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 btnRightPMousePressed(evt);
@@ -267,25 +289,39 @@ public class genFunction extends javax.swing.JPanel {
 
         btnMult.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnMult.setText("*");
+        btnMult.setMaximumSize(new java.awt.Dimension(43, 25));
+        btnMult.setMinimumSize(new java.awt.Dimension(43, 25));
+        btnMult.setName(""); // NOI18N
+        btnMult.setPreferredSize(new java.awt.Dimension(43, 25));
         btnMult.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 btnMultMousePressed(evt);
             }
         });
 
-        btnMinus1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnMinus1.setText("-");
-        btnMinus1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                btnMinus1MousePressed(evt);
-            }
-        });
-
         btnLeftP.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnLeftP.setText("(");
+        btnLeftP.setMaximumSize(new java.awt.Dimension(43, 25));
+        btnLeftP.setMinimumSize(new java.awt.Dimension(43, 25));
+        btnLeftP.setPreferredSize(new java.awt.Dimension(43, 25));
         btnLeftP.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 btnLeftPMousePressed(evt);
+            }
+        });
+
+        ComboFuncType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Maximización", "Minimización" }));
+        ComboFuncType.setMinimumSize(new java.awt.Dimension(43, 25));
+        ComboFuncType.setPreferredSize(new java.awt.Dimension(43, 25));
+
+        btnMinus1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnMinus1.setText("-");
+        btnMinus1.setMaximumSize(new java.awt.Dimension(43, 25));
+        btnMinus1.setMinimumSize(new java.awt.Dimension(43, 25));
+        btnMinus1.setPreferredSize(new java.awt.Dimension(43, 25));
+        btnMinus1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                btnMinus1MousePressed(evt);
             }
         });
 
@@ -314,37 +350,17 @@ public class genFunction extends javax.swing.JPanel {
                         .addComponent(txtPrecision, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(20, 20, 20)
-                        .addComponent(btnSin, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(btnCos, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(btnTan, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(20, 20, 20)
-                        .addComponent(btnVarX)
-                        .addGap(11, 11, 11)
-                        .addComponent(btnVarY)
-                        .addGap(11, 11, 11)
-                        .addComponent(btnVarZ))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(btnSinh, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(btnCosh, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(btnTanh, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
                         .addComponent(btnLog, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(10, 10, 10)
                         .addComponent(btnLn, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(10, 10, 10)
                         .addComponent(btnLogB, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(20, 20, 20)
+                        .addGap(11, 11, 11)
+                        .addComponent(btnMinus1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnPlus)
-                        .addGap(9, 9, 9)
-                        .addComponent(btnMinus1)
-                        .addGap(13, 13, 13)
-                        .addComponent(btnLeftP))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnLeftP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(20, 20, 20)
                         .addComponent(btnPi, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -352,15 +368,38 @@ public class genFunction extends javax.swing.JPanel {
                         .addComponent(btnE, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(10, 10, 10)
                         .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(20, 20, 20)
-                        .addComponent(btnMult)
-                        .addGap(11, 11, 11)
-                        .addComponent(btnDiv)
-                        .addGap(13, 13, 13)
-                        .addComponent(btnRightP))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnMult, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnDiv, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnRightP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(130, 130, 130)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(btnSin, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(10, 10, 10)
+                                .addComponent(btnCos, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(10, 10, 10)
+                                .addComponent(btnTan, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(ComboFuncType, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(btnSinh, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(10, 10, 10)
+                                .addComponent(btnCosh, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(10, 10, 10)
+                                .addComponent(btnTanh, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnVarX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnVarY, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnVarZ, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap(164, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -382,31 +421,36 @@ public class genFunction extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnSin)
                     .addComponent(btnCos)
-                    .addComponent(btnTan)
-                    .addComponent(btnVarX)
-                    .addComponent(btnVarY)
-                    .addComponent(btnVarZ))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnTan)
+                        .addComponent(ComboFuncType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(7, 7, 7)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnSinh)
                     .addComponent(btnCosh)
-                    .addComponent(btnTanh))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnTanh)
+                        .addComponent(btnVarX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnVarY, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnVarZ, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(7, 7, 7)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnLog)
                     .addComponent(btnLn)
-                    .addComponent(btnLogB)
-                    .addComponent(btnPlus)
-                    .addComponent(btnMinus1)
-                    .addComponent(btnLeftP))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnLogB)
+                        .addComponent(btnPlus)
+                        .addComponent(btnLeftP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnMinus1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(7, 7, 7)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnPi)
                     .addComponent(btnE)
-                    .addComponent(btnClear)
-                    .addComponent(btnMult)
-                    .addComponent(btnDiv)
-                    .addComponent(btnRightP))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnClear)
+                        .addComponent(btnMult, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnDiv, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnRightP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(17, 17, 17)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(46, Short.MAX_VALUE))
@@ -424,7 +468,7 @@ public class genFunction extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 256, Short.MAX_VALUE))
+                .addGap(0, 254, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -526,11 +570,6 @@ public class genFunction extends javax.swing.JPanel {
         txtFunction.setText(txtFunction.getText()+"/");
     }//GEN-LAST:event_btnDivMousePressed
 
-    private void btnMinus1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMinus1MousePressed
-        // TODO add your handling code here:
-        txtFunction.setText(txtFunction.getText()+"-");
-    }//GEN-LAST:event_btnMinus1MousePressed
-
     private void btnLeftPMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLeftPMousePressed
         // TODO add your handling code here:
         txtFunction.setText(txtFunction.getText()+"(");
@@ -550,6 +589,10 @@ public class genFunction extends javax.swing.JPanel {
         // TODO add your handling code here:
         txtFunction.setText(txtFunction.getText()+"z");
     }//GEN-LAST:event_btnVarZMousePressed
+
+    private void btnMinus1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMinus1MousePressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnMinus1MousePressed
     public String getFunct(){
         return this.txtFunction.getText();
     }
@@ -559,8 +602,12 @@ public class genFunction extends javax.swing.JPanel {
     }
     public Integer getPrecision(){
         return this.sliderPrecision.getValue();
-    }    
+    }  
+    public String getFunctType(){
+        return this.ComboFuncType.getSelectedItem().toString();
+    }      
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> ComboFuncType;
     private javax.swing.JButton btnClear;
     private javax.swing.JButton btnCos;
     private javax.swing.JButton btnCosh;
@@ -583,6 +630,7 @@ public class genFunction extends javax.swing.JPanel {
     private javax.swing.JButton btnVarY;
     private javax.swing.JButton btnVarZ;
     private javax.swing.JButton jButton1;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;

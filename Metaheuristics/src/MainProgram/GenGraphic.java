@@ -1,6 +1,7 @@
 package MainProgram;
 
 
+
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -127,4 +128,5 @@ public final class GenGraphic extends JFrame {
             return chPanel;            
         }                
     }
+
 }

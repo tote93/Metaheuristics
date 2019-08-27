@@ -7,31 +7,37 @@ package Algorithms.FunctionOpt;
  * @author i62gorej
  */
 class FunctOptAssignmentOperation implements FunctOptChangeOperation {
-    private int _indexKnapsack = 0;
-    private int _indexObj = 0;
+    private int _node = 0;
+    private int _size = 0;
     private double _deltaFitness = 0.;
 
     FunctOptAssignmentOperation() {}
 
-    public void setValues(int indexObject, int indexKnapsack, double deltaFitness) {
+    public void setValues(int indexObject, int valueArray, double deltaFitness) {
         this._deltaFitness = deltaFitness;
-        this._indexKnapsack = indexKnapsack;
-        this._indexObj = indexObject;
+        this._node = valueArray;
+        this._size = indexObject;
     }
 
     @Override
     public void apply(FunctOptSolution solution) {
-	solution.putNumberInX(_indexObj, _indexKnapsack);
+	solution.putNumberInX(_size, _node);
+        solution.putNumberInY(_size, _node);
+        solution.putNumberInZ(_size, _node);
+        
 	double actualFitness = solution.getFitness();
 	double newFitness = actualFitness + _deltaFitness;
-	solution.setFitness(newFitness);        
+	solution.setFitness(newFitness);   
+        solution.setBestNumberX((int) solution.getBestNumberX());
+        solution.setBestNumberY((int) solution.getBestNumberY());
+        solution.setBestNumberZ((int) solution.getBestNumberZ());        
     }
  	/**
 	 * Función que devuelve el objeto sujeto de la operación
 	 * @return índice del objeto sujeto de la operación
 	 */
-	int getObj(){
-		return _indexObj;
+	int getSize(){
+		return _size;
 	}
 
 	/**
@@ -46,7 +52,7 @@ class FunctOptAssignmentOperation implements FunctOptChangeOperation {
 	 * Función que devuelve la mochila objeto de la operación
 	 * @return mochila objeto de la operación
 	 */
-	int getKnapsack(){
-		return _indexKnapsack;
+	int getNode(){
+		return _node;
 	}   
 }

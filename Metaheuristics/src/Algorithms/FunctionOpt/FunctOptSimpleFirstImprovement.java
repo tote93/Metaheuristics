@@ -17,9 +17,8 @@ public class FunctOptSimpleFirstImprovement implements FunctOptNeighExplorer {
     @Override
     public boolean findOperation(FunctOptInstance instance, FunctOptSolution solution, FunctOptChangeOperation operation) {
         FunctOptAssignmentOperation oaOperation = (FunctOptAssignmentOperation) operation;
-        
+        String type = instance.getFuncType();
         int numElem = instance.getSize();
-        int rango = instance.getRange();
         //Crear una permutación de los índices de los objetos e inicializar algunas variables
         ArrayList<Integer> perm = new ArrayList<>();
 
@@ -27,11 +26,19 @@ public class FunctOptSimpleFirstImprovement implements FunctOptNeighExplorer {
 
         double deltaFitness = 0.;
         for (int i = 0; i < numElem; i++) {
-            for (int j = 0; j <= rango; j++) {
+            for (int j = 0; j <= 1; j++) {
                 deltaFitness = FunctOptEvaluator.computeDeltaFitness(instance, solution, perm.get(i), j);
-                if (deltaFitness > 0.0) {
-                    oaOperation.setValues(perm.get(i), j, deltaFitness);
-                    return true;
+                if(type.equals("Maximización")){
+                    if (deltaFitness > 0.0) {
+                        oaOperation.setValues(perm.get(i), j, deltaFitness);
+                        return true;
+                    }
+                }
+                else{
+                    if (deltaFitness < 0.0) {
+                        oaOperation.setValues(perm.get(i), j, deltaFitness);
+                        return true;
+                    }                    
                 }
             }
         }
